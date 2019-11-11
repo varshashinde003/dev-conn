@@ -1,5 +1,4 @@
 const webpack = require("webpack");
-const nodemon = require("nodemon");
 const paths = require("../config/paths");
 const serverConfig = require("../config/webpack.server.config");
 const clientConfig = require("../config/webpack.client.config");
@@ -7,7 +6,7 @@ const path = require("path");
 const fsextra = require("fs-extra");
 
 fsextra.emptyDirSync(path.join(paths.clientBuildDir, "static"));
-process.env["NODE_ENV"] = "development";
+process.env["NODE_ENV"] = "production";
 
 const webpackStatOptions = {
     all: false,
@@ -22,14 +21,7 @@ const webpackStatOptions = {
     chunkSort: true
 };
 
-const serverBuildFile = path.join(paths.serverBuildDir, paths.serverBuildFile);
-
-const nodemonOptions = {
-    script: serverBuildFile,
-    watch: serverBuildFile
-}
-
-webpack(serverConfig('development')).watch({}, function (error, stats) {
+webpack(serverConfig('production')).run(function (error, stats) {
     if (error) {
         console.error(error.message);
         process.exit();
@@ -39,7 +31,7 @@ webpack(serverConfig('development')).watch({}, function (error, stats) {
     }
 });
 
-webpack(clientConfig('development')).watch({}, function (error, stats) {
+webpack(clientConfig('production')).run(function (error, stats) {
     if (error) {
         console.error(error.message);
         process.exit();
@@ -48,7 +40,3 @@ webpack(clientConfig('development')).watch({}, function (error, stats) {
         console.log(stats.toString(webpackStatOptions));
     }
 });
-
-nodemon(nodemonOptions).on("start", function () {
-    console.log("Nodemon is watching for file changes");
-})
