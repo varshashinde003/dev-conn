@@ -1,7 +1,7 @@
 /node_modules/
 .env
 
-/server/build.js
-/templates/index.ejs
+server/build.js
+templates/index.ejs
 
-/
+public/static/*
