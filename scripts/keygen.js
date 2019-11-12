@@ -1,3 +1,6 @@
 import editEnv from "../utils/edit-env";
+import { getRandomString } from "../utils/random";
 
-editEnv("APP_KEY", "jsdhasgdagduaywhehi5768678352");
+if (editEnv("APP_KEY", "\"" + getRandomString(50) + "\"")) {
+    console.log("APP_KEY has been generated successfully.");
+}

@@ -4,8 +4,12 @@ import editEnv from "edit-dotenv";
 
 export default (key, value) => {
     const envLocation = path.join(__dirname.replace("utils", ""), ".env");
+    if (!fs.existsSync(envLocation)) {
+        console.error(".env file not found.");
+        return false;
+    }
     const oldEnv = fs.readFileSync(envLocation, "utf-8");
     const newEnv = editEnv(oldEnv, { [key]: value });
     fs.writeFileSync(envLocation, newEnv);
-    console.log("Env file updated successfully.");
+    return true;
 }

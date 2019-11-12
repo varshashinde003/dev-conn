@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "node scripts/post-install",
     "dev": "node scripts/watch",
     "watch": "npm run dev",
     "prod": "node scripts/build && pm2 reload config/pm2.config.js",
     "build": "npm run prod",
-    "key:gen": "babel-node scripts/keygen --config-file=./config/babel-node.config"
+    "key:gen": "babel-node scripts/keygen --config-file=./config/babel-node.config",
+    "authkey:gen": "babel-node scripts/auth-keygen --config-file=./config/babel-node.config"
   },
   "keywords": [],
   "author": "",
