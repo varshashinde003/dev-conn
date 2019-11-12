@@ -6,8 +6,12 @@ import adminRoutes from "../routes/admin-routes";
 config();
 const app = express();
 
-app.set("view engine", "ejs");
+// Connect to database
+import connectDB from "../config/db.config";
 
+connectDB();
+
+app.set("view engine", "ejs");
 app.set("views", __dirname.replace("server", "templates"));
 app.use(express.static(__dirname.replace("server", "public")));
 app.use(express.json({ extended: true }));
