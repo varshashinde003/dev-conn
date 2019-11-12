@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "node scripts/post-install",
+    "test": "babel-node scripts/test --config-file=./config/babel-node.config",
     "dev": "node scripts/watch",
     "watch": "npm run dev",
     "prod": "node scripts/build && pm2 reload config/pm2.config.js",
