@@ -1,17 +1,10 @@
-// import Admin from "../models/admin";
-// import bcrypt from "bcrypt";
+import { config } from "dotenv";
+config();
 
-import { login } from "../middlewares/auth-middleware";
-login("varshashinde003@gmail.com", "asdasdasd", "Admin").then(res => {
-    console.log(res);
+import { sendMail } from "../utils/mailer";
+
+sendMail("varshashinde003@gmail.com", "Varsha", "salman.ekport@gmail.com", "Salman", "This is test subject", "This is test email body").then(() => {
+    console.log("Mail sent successfully");
+}).catch(err => {
+    console.log("Error sending email", err);
 })
-
-// Admin.create({
-//     name: "Varsha",
-//     email: "varshashinde003@gmail.com",
-//     password: bcrypt.hashSync("asdasdasd", 10)
-// }).then(docs => {
-//     console.log(docs)
-// }).catch(error => {
-//     console.log(error.message);
-// });

@@ -1,9 +1,17 @@
 import express from "express";
 const router = express.Router();
+import _Admin from "../models/admin";
+import _AdminPasswordReset from "../models/admin-password-reset";
 import { auth } from "../middlewares/auth-middleware";
-import { doLogin, getProfile } from "../controllers/admin-auth-controller";
+import AuthController from "../controllers/auth-controller";
 
-router.post("/login", doLogin);
-router.get("/profile", [auth("Admin")], getProfile);
+const adminAuth = new AuthController("Admin");
+
+router.post("/login", adminAuth.login);
+router.get("/profile", [auth("Admin")], adminAuth.getProfile);
+
+router.post("/change-password", [auth("Admin")], adminAuth.changePassword);
+router.post("/forget-password", adminAuth.sendForgetPasswordMail);
+router.post("/reset-password", adminAuth.resetPassword);
 
 export default router;

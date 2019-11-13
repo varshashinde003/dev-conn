@@ -1,39 +1,5 @@
-import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-
-export const login = (username, password, model = "User", loginWith = "email") => {
-    return mongoose.model(model).findOne({ [loginWith]: username })
-        .exec()
-        .then(user => {
-            if (!user) {
-                return {
-                    statusCode: 401,
-                    message: "We can't find such account."
-                }
-            } else {
-                if (bcrypt.compareSync(password, user.password)) {
-                    const token = jwt.sign({ _id: user._id }, process.env.AUTH_KEY);
-                    return {
-                        token,
-                        statusCode: 200,
-                        message: "Logged in succesfully."
-                    }
-                } else {
-                    return {
-                        statusCode: 422,
-                        message: "Unauthorized."
-                    }
-                }
-            }
-        }).catch(err => {
-            return {
-                statusCode: 500,
-                message: err.message
-            }
-        })
-}
-
 
 export const auth = (model = "User") => {
     const authModel = mongoose.model(model);
@@ -46,8 +12,6 @@ export const auth = (model = "User") => {
                 if (error) {
                     return throwUnauthorizedError(res);
                 } else {
-                    console.log(decoded._id);
-
                     authModel.findOne({ _id: decoded._id })
                         .select("_id name email createdAt updatedAt")
                         .exec()
@@ -62,7 +26,7 @@ export const auth = (model = "User") => {
                         .catch(err => {
                             const result = {
                                 statusCode: 500,
-                                message: process.env.APP_ENV === "development" ? err.message : "Something went wrong. Please try again later"
+                                message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
                             }
                             res.statusCode = result.statusCode;
                             return res.json(result);
