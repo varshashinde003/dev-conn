@@ -6,6 +6,7 @@ import path from "path";
 import { getRandomNumberByRange } from "../utils/random";
 import moment from "moment";
 import { sendMail } from "../utils/mailer";
+import log from "../utils/logger";
 
 export default class Auth {
     constructor(model = "User", loginWith = "email") {
@@ -18,6 +19,8 @@ export default class Auth {
 
         this.sendForgetPasswordMail = this.sendForgetPasswordMail.bind(this);
         this.resetPassword = this.resetPassword.bind(this);
+
+        this.errorHandler = this.errorHandler.bind(this);
     }
 
     login(req, res) {
@@ -52,14 +55,8 @@ export default class Auth {
                         return res.json(result);
                     }
                 }
-            }).catch(err => {
-                const result = {
-                    statusCode: 500,
-                    message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
-                }
-                res.statusCode = result.statusCode;
-                return res.json(result);
             })
+            .catch(err => this.errorHandler(err, res));
     }
 
     getProfile(req, res) {
@@ -91,14 +88,7 @@ export default class Auth {
                     return res.json(result);
                 }
             })
-            .catch(err => {
-                const result = {
-                    statusCode: 500,
-                    message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
-                }
-                res.statusCode = result.statusCode;
-                return res.json(result);
-            });
+            .catch(err => this.errorHandler(err, res));
     }
 
     sendForgetPasswordMail(req, res) {
@@ -147,14 +137,7 @@ export default class Auth {
                     return res.json(result);
                 }
             })
-            .catch(err => {
-                const result = {
-                    statusCode: 500,
-                    message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
-                }
-                res.statusCode = result.statusCode;
-                return res.json(result);
-            })
+            .catch(err => this.errorHandler(err, res));
     }
 
     resetPassword(req, res) {
@@ -200,13 +183,16 @@ export default class Auth {
                     }
                 }
             })
-            .catch(err => {
-                const result = {
-                    statusCode: 500,
-                    message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
-                }
-                res.statusCode = result.statusCode;
-                return res.json(result);
-            })
+            .catch(err => this.errorHandler(err, res));
+    }
+
+    errorHandler(err, res) {
+        log.error(err.message);
+        const result = {
+            statusCode: 500,
+            message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
+        }
+        res.statusCode = result.statusCode;
+        return res.json(result);
     }
 }
