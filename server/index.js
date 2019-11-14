@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import indexRoutes from "../routes/index-routes";
 import adminRoutes from "../routes/admin-routes";
 import log from "../utils/logger";
+import cookieParser from "cookie-parser";
 config();
 const app = express();
 
@@ -15,6 +16,7 @@ app.set("view engine", "ejs");
 app.set("views", __dirname.replace("server", "templates"));
 app.use(express.static(__dirname.replace("server", "public")));
 app.use(express.json({ extended: true }));
+app.use(cookieParser(process.env.APP_KEY));
 
 app.use("/admin/", adminRoutes);
 app.use("/", indexRoutes);

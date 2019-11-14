@@ -1,25 +1,32 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
-export const auth = (model = "User") => {
-    const authModel = mongoose.model(model);
-    return (req, res, next) => {
-        const token = req.headers["authorization"] && req.headers["authorization"].split("Bearer ")[1];
+export default class AuthMiddleware {
+    constructor(model = "User") {
+        this.model = model;
+        this.auth = this.auth.bind(this);
+        this.apiAuth = this.apiAuth.bind(this);
+        this.webAuth = this.webAuth.bind(this);
+        this.throwUnauthorizedError = this.throwUnauthorizedError.bind(this);
+    }
+
+    auth(req, res, next, token) {
         if (!token) {
-            return throwUnauthorizedError(res);
+            return this.throwUnauthorizedError(res);
         } else {
             jwt.verify(token, process.env.AUTH_KEY, {}, (error, decoded) => {
                 if (error) {
-                    return throwUnauthorizedError(res);
+                    return this.throwUnauthorizedError(res);
                 } else {
+                    const authModel = mongoose.model(this.model);
                     authModel.findOne({ _id: decoded._id })
                         .select("_id name email createdAt updatedAt")
                         .exec()
                         .then(user => {
                             if (!user) {
-                                return throwUnauthorizedError(res);
+                                return this.throwUnauthorizedError(res);
                             } else {
-                                req[model] = user;
+                                req[this.model] = user;
                                 next();
                             }
                         })
@@ -35,13 +42,24 @@ export const auth = (model = "User") => {
             });
         }
     }
-}
 
-const throwUnauthorizedError = (res) => {
-    const result = {
-        statusCode: 401,
-        message: "Unauthorized."
+    webAuth(req, res, next) {
+        const token = req.signedCookies.auth_token;
+        return this.auth(req, res, next, token);
     }
-    res.statusCode = result.statusCode;
-    return res.json(result);
+
+    apiAuth(req, res, next) {
+        const token = req.headers["authorization"] && req.headers["authorization"].split("Bearer ")[1];
+        return this.auth(req, res, next, token);
+    }
+
+
+    throwUnauthorizedError(res) {
+        const result = {
+            statusCode: 401,
+            message: "Unauthorized."
+        }
+        res.statusCode = result.statusCode;
+        return res.json(result);
+    }
 }

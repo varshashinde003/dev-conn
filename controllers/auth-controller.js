@@ -21,12 +21,15 @@ export default class Auth {
         this.resetPassword = this.resetPassword.bind(this);
 
         this.errorHandler = this.errorHandler.bind(this);
+
+        this.webLogin = this.webLogin.bind(this);
+        this.apiLogin = this.apiLogin.bind(this);
     }
 
-    login(req, res) {
+    login(req) {
         const username = req.body.email;
         const password = req.body.password;
-        mongoose.model(this.model).findOne({ [this.loginWith]: username })
+        return mongoose.model(this.model).findOne({ [this.loginWith]: username })
             .exec()
             .then(user => {
                 if (!user) {
@@ -34,8 +37,7 @@ export default class Auth {
                         statusCode: 401,
                         message: "We can't find such account."
                     }
-                    res.statusCode = result.statusCode;
-                    return res.json(result);
+                    return result;
                 } else {
                     if (bcrypt.compareSync(password, user.password)) {
                         const token = jwt.sign({ _id: user._id }, process.env.AUTH_KEY);
@@ -44,24 +46,43 @@ export default class Auth {
                             statusCode: 200,
                             message: "Logged in succesfully."
                         }
-                        res.statusCode = result.statusCode;
-                        return res.json(result);
+                        return result;
                     } else {
                         const result = {
                             statusCode: 422,
                             message: "Unauthorized."
                         }
-                        res.statusCode = result.statusCode;
-                        return res.json(result);
+                        return result;
                     }
                 }
             })
-            .catch(err => this.errorHandler(err, res));
+            .catch(err => {
+                log.error(err.message);
+                const result = {
+                    statusCode: 500,
+                    message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
+                }
+                return result;
+            });
+    }
+
+    webLogin(req, res) {
+        this.login(req).then(result => {
+            res.statusCode = result.statusCode;
+            res.cookie("auth_token", result.token, { signed: true }).json(result);
+        })
+    }
+
+    apiLogin(req, res) {
+        this.login(req).then(result => {
+            res.statusCode = result.statusCode;
+            return res.json(result);
+        })
     }
 
     getProfile(req, res) {
         const user = req[this.model];
-        return res.json({ status: "success", profile: user })
+        return res.json({ statusCode: 200, message: "success", profile: user })
     }
 
     changePassword(req, res) {
@@ -194,5 +215,9 @@ export default class Auth {
         }
         res.statusCode = result.statusCode;
         return res.json(result);
+    }
+
+    logout(req, res) {
+        return res.clearCookie("auth_token").json({ statusCode: 200, message: "Logged out successfully" })
     }
 }
