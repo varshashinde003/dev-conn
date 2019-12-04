@@ -1,36 +1,48 @@
 import { Schema, model } from "mongoose";
 
-const employerSchema = new Schema({
-    company_name: {
+const jobSchema = new Schema({
+    title: {
         type: String,
         required: true
     },
-    company_logo: {
-        type: String,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    contact: {
+    conpany: {
         type: String,
         required: true
     },
     designation: {
         type: String,
+        required: true,
+        unique: true
+    },
+    location: {
+        type: String,
         required: true
     },
-    address: {
+    posted_on: {
+        type: Date,
+        required: true
+    },
+    expire_on: {
+        type: Date,
+        required: true
+    },
+    experience: {
+        type: String,
+        required: true
+    },
+    cover_img: {
+        type: String,
+        required: true
+    },
+    education: {
+        type: String,
+        required: true
+    },
+    summary: {
+        type: Text,
+        required: true
+    },
+    description: {
         type: Text,
         required: true
     },
@@ -46,37 +58,35 @@ const employerSchema = new Schema({
         type: String,
         required: true
     },
-    company_email: {
+    url: {
+        type: String,
+        required: false
+    },
+    no_of_applicants: {
         type: String,
         required: true
     },
-    company_website: {
-        type: String,
-        required: true
-    },
-    company_desc: {
-        type: Text,
-        required: true
-    },
-    industries: {
-        type: Array,
-        required: true
-    },
-    is_email_verified: {
+    is_verified: {
         type: Boolean,
         default: false,
         required: true
     },
-    is_contact_verified: {
+    is_active: {
         type: Boolean,
         default: false,
         required: true
     },
-    account_activated_on: {
-        type: Date,
+    salary: {
+        type: String,
+        required: false
+    },
+    job_type: {
+        type: String,
         required: true
     },
-    emailToken: String
+    industry: {
+        type: String,
+        required: false
+    }
 }, { timestamps: true });
-
-export default model("Employer", employerSchema);
+export default model("Job", jobSchema);

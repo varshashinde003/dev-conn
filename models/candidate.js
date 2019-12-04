@@ -22,7 +22,7 @@ const candidateSchema = new Schema({
         type: String,
         required: true
     },
-    avatar: {
+    profile_img: {
         type: String,
         required: true
     },
@@ -84,11 +84,11 @@ const candidateSchema = new Schema({
                 type: String,
                 required: true
             },
-            fieldOfStudy: {
+            field_of_study: {
                 type: String,
                 required: true
             },
-            sta: {
+            from: {
                 type: Date,
                 required: true
             },
@@ -133,6 +133,10 @@ const candidateSchema = new Schema({
     },
     account_activated_on: {
         type: Date
+    },
+    resume: {
+        type: String,
+        required: true
     },
     emailToken: String
 }, { timestamps: true });
