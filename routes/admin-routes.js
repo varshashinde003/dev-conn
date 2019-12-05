@@ -11,10 +11,10 @@ const authMiddleware = new AuthMiddleware("Admin");
 router.post("/web-login", adminAuth.webLogin);
 router.post("/api-login", adminAuth.apiLogin);
 router.post("/logout", adminAuth.logout);
-router.get("/profile", [authMiddleware.webAuth], adminAuth.getProfile);
-
-router.post("/change-password", [authMiddleware.webAuth], adminAuth.changePassword);
 router.post("/forget-password", adminAuth.sendForgetPasswordMail);
 router.post("/reset-password", adminAuth.resetPassword);
+
+router.get("/profile", [authMiddleware.webAuth], adminAuth.getProfile);
+router.post("/change-password", [authMiddleware.webAuth], adminAuth.changePassword);
 
 export default router;

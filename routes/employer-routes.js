@@ -1,20 +1,26 @@
 import express from "express";
 const router = express.Router();
-import _Admin from "../models/admin";
-import _AdminPasswordReset from "../models/admin-password-reset";
+import _Employer from "../models/employer";
+import _EmployerPasswordReset from "../models/employer-password-reset";
 import AuthMiddleware from "../middlewares/auth-middleware";
+import activeAccountMiddleware from "../middlewares/active-account-middleware";
 import AuthController from "../controllers/auth-controller";
+import { createEmployer } from "../controllers/employer-controller";
 
-const adminAuth = new AuthController("Admin");
-const authMiddleware = new AuthMiddleware("Admin");
+const employerAuth = new AuthController("Employer");
+const authMiddleware = new AuthMiddleware("Employer");
 
-router.post("/web-login", adminAuth.webLogin);
-router.post("/api-login", adminAuth.apiLogin);
-router.post("/logout", adminAuth.logout);
-router.get("/profile", [authMiddleware.webAuth], adminAuth.getProfile);
+router.post("/signup", createEmployer);
+router.post("/api-login", employerAuth.apiLogin);
+router.post("/forget-password", employerAuth.sendForgetPasswordMail);
+router.post("/reset-password", employerAuth.resetPassword);
 
-router.post("/change-password", [authMiddleware.webAuth], adminAuth.changePassword);
-router.post("/forget-password", adminAuth.sendForgetPasswordMail);
-router.post("/reset-password", adminAuth.resetPassword);
+router.use(authMiddleware.apiAuth);
+router.post("/logout", employerAuth.logout);
+
+router.use(activeAccountMiddleware('Employer'));
+
+router.get("/profile", employerAuth.getProfile);
+router.post("/change-password", employerAuth.changePassword);
 
 export default router;

@@ -14,6 +14,10 @@ const adminSchema = new Schema({
         type: String,
         required: true
     },
+    account_activated_on: {
+        type: Date,
+        default: new Date()
+    },
 }, { timestamps: true });
 
 export default model("Admin", adminSchema);

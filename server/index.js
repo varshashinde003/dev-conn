@@ -2,6 +2,7 @@ import express from "express";
 import { config } from "dotenv";
 import indexRoutes from "../routes/index-routes";
 import adminRoutes from "../routes/admin-routes";
+import employerRoutes from "../routes/employer-routes";
 import log from "../utils/logger";
 import cookieParser from "cookie-parser";
 config();
@@ -18,7 +19,8 @@ app.use(express.static(__dirname.replace("server", "public")));
 app.use(express.json({ extended: true }));
 app.use(cookieParser(process.env.APP_KEY));
 
-app.use("/admin/", adminRoutes);
+app.use("/admin", adminRoutes);
+app.use("/employer", employerRoutes);
 app.use("/", indexRoutes);
 
 app.use((err, req, res, next) => {

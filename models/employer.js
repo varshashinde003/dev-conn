@@ -6,7 +6,7 @@ const employerSchema = new Schema({
         required: true
     },
     company_logo: {
-        type: String,
+        type: Object,
         required: true
     },
     name: {
@@ -31,7 +31,7 @@ const employerSchema = new Schema({
         required: true
     },
     address: {
-        type: Text,
+        type: String,
         required: true
     },
     city: {
@@ -55,17 +55,16 @@ const employerSchema = new Schema({
         required: true
     },
     company_desc: {
-        type: Text,
+        type: String,
         required: true
     },
     industries: {
         type: Array,
         required: true
     },
-    is_email_verified: {
-        type: Boolean,
-        default: false,
-        required: true
+    email_verified_at: {
+        type: Date,
+        required: false
     },
     is_contact_verified: {
         type: Boolean,
@@ -74,9 +73,8 @@ const employerSchema = new Schema({
     },
     account_activated_on: {
         type: Date,
-        required: true
+        required: false
     },
-    emailToken: String
 }, { timestamps: true });
 
 export default model("Employer", employerSchema);

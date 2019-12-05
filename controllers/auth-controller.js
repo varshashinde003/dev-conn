@@ -57,8 +57,14 @@ export default class Auth {
                             } else {
                                 if (bcrypt.compareSync(password, user.password)) {
                                     const token = jwt.sign({ _id: user._id }, process.env.AUTH_KEY);
+                                    const profile = { ...user._doc };
+                                    delete profile['_id'];
+                                    delete profile['password'];
+                                    delete profile['__v'];
+
                                     const result = {
                                         token,
+                                        profile,
                                         statusCode: 200,
                                         message: "Logged in succesfully."
                                     }
@@ -195,7 +201,7 @@ export default class Auth {
                                                         }
                                                         res.statusCode = result.statusCode;
                                                         return res.json(result);
-                                                    })
+                                                    });
                                             }
                                         })
                                     })

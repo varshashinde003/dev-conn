@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Verify Your Email</title>
+</head>
+
+<body>
+    <p>Hi <%= name%>,</p>
+    <p>Please click on the link to verify : <a href="<%= process.env.BASE_URL + "/verify-email/" + link %>"> Click
+            here
+        </a> </p>
+    <br />
+    <p>Please note :</p>
+    <p><small>The Link & OTP are valid only for next 5 Minutes.</small></p>
+
+</body>
+
+</html>

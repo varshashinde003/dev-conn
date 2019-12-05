@@ -27,7 +27,7 @@ const candidateSchema = new Schema({
         required: true
     },
     address: {
-        type: Text,
+        type: String,
         required: true
     },
     city: {

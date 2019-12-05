@@ -18,7 +18,7 @@ const applicationSchema = new Schema({
         required: true
     },
     cover_letter: {
-        type: text,
+        type: String,
         required: false
     },
     resume: {
