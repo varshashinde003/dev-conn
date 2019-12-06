@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 export default class AuthMiddleware {
-    constructor(model = "User") {
+    constructor(model = "Employer") {
         this.model = model;
         this.auth = this.auth.bind(this);
         this.apiAuth = this.apiAuth.bind(this);

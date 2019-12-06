@@ -11,7 +11,7 @@ import Validator from "../utils/validator";
 import errorFormatter from "../utils/error-formatter";
 
 export default class Auth {
-    constructor(model = "User", loginWith = "email") {
+    constructor(model = "Employer", loginWith = "email") {
         this.model = model;
         this.loginWith = loginWith;
 

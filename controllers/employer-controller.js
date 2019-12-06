@@ -7,7 +7,7 @@ import Validator from "../utils/validator";
 import errorFormatter from "../utils/error-formatter";
 import log from "../utils/logger";
 import Employer from "../models/employer";
-import VerifyEmail from "../models/verify_email";
+import VerifyEmail from "../models/email-verification";
 import moment from "moment";
 import { getRandomString } from "../utils/random";
 import { sendMail } from "../utils/mailer";
