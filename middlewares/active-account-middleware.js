@@ -3,11 +3,12 @@ export default (model) => {
         if (req[model] && req[model].account_activated_on) {
             next();
         } else {
-            res.statusCode = 403
-            return res.json({
+            const result = {
                 statusCode: 403,
                 message: "Your Account is under review"
-            });
+            }
+            res.statusCode = result.statusCode;
+            return res.json(result);
         }
 
     }

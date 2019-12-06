@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const employerPasswordResetSchema = new Schema({
+const candidatePasswordResetSchema = new Schema({
     email: {
         type: String,
         required: true
@@ -15,4 +15,4 @@ const employerPasswordResetSchema = new Schema({
     }
 });
 
-export default model("EmployerPasswordReset", employerPasswordResetSchema)
+export default model("CandidatePasswordReset", candidatePasswordResetSchema)

@@ -6,29 +6,21 @@ import path from "path";
 import Validator from "../utils/validator";
 import errorFormatter from "../utils/error-formatter";
 import log from "../utils/logger";
-import Employer from "../models/employer";
-import VerifyEmail from "../models/verify_email";
+import Candidate from "../models/candidate";
+import VerifyEmail from "../models/email-verification";
 import moment from "moment";
 import { getRandomString } from "../utils/random";
 import { sendMail } from "../utils/mailer";
 
-export const createEmployer = (req, res) => {
+export const createCandidate = (req, res) => {
     const val = new Validator(req.body, {
-        company_name: "required|string",
-        company_logo: "required",
         name: "required|string",
-        email: "required|email|unique:Employer,email",
-        password: "required|string",
+        email: "required|email|unique:Candidate,email",
         contact: "required|string",
-        designation: "required|string",
-        address: "required|string",
+        password: "required|string",
         city: "required|string",
         state: "required|string",
-        country: "required|string",
-        company_email: "required|email",
-        company_website: "required|string",
-        company_desc: "required|string",
-        industries: "required|array",
+        country: "required|string"
     });
 
     return val.check()
@@ -39,13 +31,14 @@ export const createEmployer = (req, res) => {
                     message: "Invalid inputs",
                     errors: errorFormatter(val.errors)
                 }
+                res.statusCode = result.statusCode;
                 return res.json(result);
             } else {
                 const request = {
                     ...req.body,
                     password: bcrypt.hashSync(req.body.password, 10)
                 }
-                Employer.create(request).then(employer => {
+                Candidate.create(request).then(candidate => {
                     const verification_data = {
                         email: request.email,
                         link: uniqid(getRandomString(50)),
@@ -53,17 +46,17 @@ export const createEmployer = (req, res) => {
                     }
                     VerifyEmail.create(verification_data)
                         .then(verification_body => {
-                            const token = jwt.sign({ _id: employer._id }, process.env.APP_KEY);
+                            const token = jwt.sign({ _id: candidate._id }, process.env.APP_KEY);
                             const result = {
                                 token,
                                 statusCode: 200,
                                 message: "Account created succesfully."
                             }
-                            return ejs.renderFile(path.join(__dirname.replace("server", "templates"), "emails", "account-verification.ejs"), { link: verification_body.link, name: employer.name }, (error, body) => {
+                            return ejs.renderFile(path.join(__dirname.replace("server", "templates"), "emails", "account-verification.ejs"), { link: verification_body.link, name: candidate.name, model: "candidate" }, (error, body) => {
                                 if (error) {
                                     throw error;
                                 } else {
-                                    return sendMail("System", `noreply@${process.env.BASE_URL}`, verification_body.email, employer.name, "Verify your email address", body, "html").then(() => {
+                                    return sendMail("System", `noreply@${process.env.BASE_URL}`, verification_body.email, candidate.name, "Verify your email address", body, "html").then(() => {
                                         const result = {
                                             statusCode: 200,
                                             message: "Mail has been sent"
@@ -85,6 +78,11 @@ export const createEmployer = (req, res) => {
                 statusCode: 500,
                 message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
             }
+            res.statusCode = result.statusCode;
             return res.json(result);
         });
+}
+
+export const updateProfile = (req, res) => {
+    const user = req.Candidate;
 }

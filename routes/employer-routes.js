@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 import _Employer from "../models/employer";
 import _EmployerPasswordReset from "../models/employer-password-reset";
+import _EmailVerification from "../models/email-verification";
 import AuthMiddleware from "../middlewares/auth-middleware";
 import activeAccountMiddleware from "../middlewares/active-account-middleware";
 import AuthController from "../controllers/auth-controller";
@@ -16,7 +17,7 @@ router.post("/signup", createEmployer);
 router.post("/api-login", employerAuth.apiLogin);
 router.post("/forget-password", employerAuth.sendForgetPasswordMail);
 router.post("/reset-password", employerAuth.resetPassword);
-router.post("/verify-email/:token", emailVerification.verifyEmail);
+router.get("/verify-email/:token", emailVerification.verifyEmail);
 
 router.use(authMiddleware.apiAuth);
 router.get("/profile", employerAuth.getProfile);

@@ -28,7 +28,7 @@ export default class Auth {
         this.apiLogin = this.apiLogin.bind(this);
     }
 
-    login(req) {
+    login(req, res) {
         const val = new Validator(req.body, {
             [this.loginWith]: `required|${this.loginWith}|exists:${this.model},${this.loginWith}`,
             password: "required|string"
@@ -92,14 +92,12 @@ export default class Auth {
 
     webLogin(req, res) {
         this.login(req).then(result => {
-            res.statusCode = result.statusCode;
             res.cookie("auth_token", result.token, { signed: true }).json(result);
         })
     }
 
     apiLogin(req, res) {
         this.login(req).then(result => {
-            res.statusCode = result.statusCode;
             return res.json(result);
         })
     }
@@ -123,7 +121,6 @@ export default class Auth {
                         message: "Invalid inputs",
                         errors: errorFormatter(val.errors)
                     }
-                    res.statusCode = result.statusCode;
                     return res.json(result);
                 } else {
                     const { oldPassword, newPassword } = req.body;
@@ -137,7 +134,6 @@ export default class Auth {
                                             statusCode: 200,
                                             message: "Password has been updated successfuly."
                                         }
-                                        res.statusCode = result.statusCode;
                                         return res.json(result);
                                     })
                             } else {
@@ -145,7 +141,6 @@ export default class Auth {
                                     statusCode: 422,
                                     message: "Old password is Invalid."
                                 }
-                                res.statusCode = result.statusCode;
                                 return res.json(result);
                             }
                         });
@@ -166,7 +161,6 @@ export default class Auth {
                         message: "Invalid inputs",
                         errors: errorFormatter(val.errors)
                     }
-                    res.statusCode = result.statusCode;
                     return res.json(result);
                 } else {
                     const username = req.body[this.loginWith];
@@ -199,7 +193,6 @@ export default class Auth {
                                                             statusCode: 200,
                                                             message: "Mail has been sent"
                                                         }
-                                                        res.statusCode = result.statusCode;
                                                         return res.json(result);
                                                     });
                                             }
@@ -210,7 +203,6 @@ export default class Auth {
                                     statusCode: 422,
                                     message: "We couldn't find any account associated with this email."
                                 }
-                                res.statusCode = result.statusCode;
                                 return res.json(result);
                             }
                         })
@@ -233,7 +225,6 @@ export default class Auth {
                         message: "Invalid inputs",
                         errors: errorFormatter(val.errors)
                     }
-                    res.statusCode = result.statusCode;
                     return res.json(result);
                 } else {
                     const { email, otp, newPassword } = req.body;
@@ -246,7 +237,6 @@ export default class Auth {
                                     statusCode: 422,
                                     message: "Invalid OTP."
                                 }
-                                res.statusCode = result.statusCode;
                                 return res.json(result);
                             } else {
                                 const { expiresAt } = passwordReset;
@@ -258,7 +248,6 @@ export default class Auth {
                                         statusCode: 422,
                                         message: "OTP has expired."
                                     }
-                                    res.statusCode = result.statusCode;
                                     return res.json(result);
                                 } else {
                                     return mongoose.model(this.model).updateOne({ email: passwordReset.email }, { password: bcrypt.hashSync(newPassword, 10) })
@@ -271,7 +260,6 @@ export default class Auth {
                                                         statusCode: 200,
                                                         message: "Password has been updated successfully"
                                                     }
-                                                    res.statusCode = result.statusCode;
                                                     return res.json(result);
                                                 })
                                         })
@@ -290,7 +278,6 @@ export default class Auth {
             statusCode: 500,
             message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
         }
-        res.statusCode = result.statusCode;
         return res.json(result);
     }
 

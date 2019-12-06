@@ -10,7 +10,8 @@
 
 <body>
     <p>Hi <%= name%>,</p>
-    <p>Please click on the link to verify : <a href="<%= process.env.BASE_URL + "/verify-email/" + link %>"> Click
+    <p>Please click on the link to verify : <a
+            href="<%= process.env.BASE_URL + "/" + model + "/verify-email/" + link %>"> Click
             here
         </a> </p>
     <br />

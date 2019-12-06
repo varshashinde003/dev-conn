@@ -16,7 +16,7 @@ const candidateSchema = new Schema({
     },
     dob: {
         type: Date,
-        required: true
+        required: false
     },
     password: {
         type: String,
@@ -24,11 +24,11 @@ const candidateSchema = new Schema({
     },
     profile_img: {
         type: String,
-        required: true
+        required: false
     },
     address: {
         type: String,
-        required: true
+        required: false
     },
     city: {
         type: String,
@@ -50,18 +50,18 @@ const candidateSchema = new Schema({
         {
             title: {
                 type: String,
-                required: true
+                required: false
             },
             company: {
                 type: String,
-                required: true
+                required: false
             },
             location: {
                 type: String
             },
             joining_date: {
                 type: Date,
-                required: true
+                required: false
             },
             last_date: {
                 type: Date
@@ -78,19 +78,19 @@ const candidateSchema = new Schema({
         {
             school: {
                 type: String,
-                required: true
+                required: false
             },
             degree: {
                 type: String,
-                required: true
+                required: false
             },
             field_of_study: {
                 type: String,
-                required: true
+                required: false
             },
             from: {
                 type: Date,
-                required: true
+                required: false
             },
             to: {
                 type: Date
@@ -121,24 +121,27 @@ const candidateSchema = new Schema({
             type: String
         }
     },
-    is_email_verified: {
-        type: Boolean,
-        default: false,
-        required: true
+    resume: {
+        type: String,
+        required: false
+    },
+    email_verified_at: {
+        type: Date,
+        required: false
     },
     is_contact_verified: {
         type: Boolean,
         default: false,
-        required: true
+        required: false
     },
     account_activated_on: {
-        type: Date
+        type: Date,
+        required: false
     },
-    resume: {
-        type: String,
-        required: true
+    is_profile_completed: {
+        type: Boolean,
+        default: false,
     },
-    emailToken: String
 }, { timestamps: true });
 
 export default model("Candidate", candidateSchema);

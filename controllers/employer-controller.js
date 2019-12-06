@@ -39,6 +39,7 @@ export const createEmployer = (req, res) => {
                     message: "Invalid inputs",
                     errors: errorFormatter(val.errors)
                 }
+                res.statusCode = result.statusCode;
                 return res.json(result);
             } else {
                 const request = {
@@ -59,7 +60,7 @@ export const createEmployer = (req, res) => {
                                 statusCode: 200,
                                 message: "Account created succesfully."
                             }
-                            return ejs.renderFile(path.join(__dirname.replace("server", "templates"), "emails", "account-verification.ejs"), { link: verification_body.link, name: employer.name }, (error, body) => {
+                            return ejs.renderFile(path.join(__dirname.replace("server", "templates"), "emails", "account-verification.ejs"), { link: verification_body.link, name: employer.name, model: "employer" }, (error, body) => {
                                 if (error) {
                                     throw error;
                                 } else {
@@ -85,6 +86,7 @@ export const createEmployer = (req, res) => {
                 statusCode: 500,
                 message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
             }
+            res.statusCode = result.statusCode;
             return res.json(result);
         });
 }

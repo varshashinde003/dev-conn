@@ -4,6 +4,7 @@ import log from "../utils/logger";
 export default class Verification {
     constructor(model = "Employer") {
         this.model = model;
+        this.verifyEmail = this.verifyEmail.bind(this);
     }
     verifyEmail(req, res) {
         const token = req.params.token;
@@ -15,10 +16,10 @@ export default class Verification {
                         statusCode: 422,
                         message: "Invalid Link"
                     }
-                    res.statusCode = 422;
+                    res.statusCode = result.statusCode;
                     return res.json(result);
                 } else {
-                    return mongoose.model([this.model]).findOne({ email: record.email })
+                    return mongoose.model(this.model).findOne({ email: record.email })
                         .exec()
                         .then(user => {
                             if (!user) {
@@ -26,7 +27,7 @@ export default class Verification {
                                     statusCode: 400,
                                     message: "User not found."
                                 }
-                                res.statusCode = 400;
+                                res.statusCode = result.statusCode;
                                 return res.json(result);
                             } if (!user.email_verified_at) {
                                 user.email_verified_at = new Date();
@@ -35,6 +36,7 @@ export default class Verification {
                                     statusCode: 200,
                                     message: "Verified successfully"
                                 }
+                                // return res.render("status", { status: result.statusCode });
                                 return res.json(result);
                             } else {
                                 const result = {
@@ -52,6 +54,7 @@ export default class Verification {
                     statusCode: 500,
                     message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
                 }
+                res.statusCode = result.statusCode;
                 return res.json(result);
             });
     }
