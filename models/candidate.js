@@ -46,6 +46,12 @@ const candidateSchema = new Schema({
         type: String,
         required: false
     },
+    bio: {
+        type: String
+    },
+    githubusername: {
+        type: String
+    },
     experience: [
         {
             title: {

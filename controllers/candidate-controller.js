@@ -85,4 +85,47 @@ export const createCandidate = (req, res) => {
 
 export const updateProfile = (req, res) => {
     const user = req.Candidate;
+    const val = new Validator(req.body, {
+        dob: "required|string",
+        address: "required|string",
+        bio: "required|string",
+        githubusername: "required|string",
+    });
+
+    return val.check()
+        .then(matched => {
+            if (!matched) {
+                const result = {
+                    statusCode: 422,
+                    message: "Invalid inputs",
+                    errors: errorFormatter(val.errors)
+                }
+                res.statusCode = result.statusCode;
+                return res.json(result);
+            } else {
+                const { dob, profile_img, address, bio, githubusername, website, youtube, facebook, twitter, instagram, linkedin } = req.body;
+                const profile = {};
+                if (dob) profile.dob = dob;
+                if (profile_img) profile.profile_img = profile_img;
+                if (address) profile.address = address;
+                if (website) profile.website = website;
+                if (bio) profile.bio = bio;
+                if (githubusername) profile.githubusername = githubusername;
+                profile.social = {};
+                if (youtube) profile.social.youtube = youtube;
+                if (twitter) profile.social.twitter = twitter;
+                if (facebook) profile.social.facebook = facebook;
+                if (linkedin) profile.social.linkedin = linkedin;
+                if (instagram) profile.social.instagram = instagram;
+
+                console.log(profile);
+                Candidate.findOneAndUpdate({ _id: user._id }, { $set: profile });
+                const result = {
+                    statusCode: 200,
+                    message: "Profile created",
+                    profile: profile
+                }
+                return res.json(result);
+            }
+        }).catch(e => this.errorHandler(e, res));
 }
