@@ -6,7 +6,7 @@ import _EmailVerification from "../models/email-verification";
 import AuthMiddleware from "../middlewares/auth-middleware";
 import activeAccountMiddleware from "../middlewares/active-account-middleware";
 import AuthController from "../controllers/auth-controller";
-import { createCandidate, updateProfile } from "../controllers/candidate-controller";
+import { createCandidate, updateProfile, getProfile, addEducation, addExperience } from "../controllers/candidate-controller";
 import VerificationController from "../controllers/verification-controller";
 
 const candidateAuth = new AuthController("Candidate");
@@ -20,8 +20,10 @@ router.post("/reset-password", candidateAuth.resetPassword);
 router.get("/verify-email/:token", emailVerification.verifyEmail);
 
 router.use(authMiddleware.apiAuth);
-router.get("/profile", candidateAuth.getProfile);
+router.get("/profile", getProfile);
 router.post("/create-profile", updateProfile);
+router.post("/add-education", addEducation);
+router.post("/add-experience", addExperience);
 router.post("/logout", candidateAuth.logout);
 router.post("/change-password", candidateAuth.changePassword);
 

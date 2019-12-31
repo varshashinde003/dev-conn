@@ -72,15 +72,15 @@ export const createCandidate = (req, res) => {
                 })
             }
         })
-        .catch(err => {
-            log.error(err.message);
-            const result = {
-                statusCode: 500,
-                message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
-            }
-            res.statusCode = result.statusCode;
-            return res.json(result);
-        });
+        .catch(err => errorHandler(err, res));
+}
+
+export const getProfile = (req, res) => {
+    const user = req.Candidate;
+    return Candidate.findOne({ _id: user._id }, { password: 0, "__v": 0 }).exec()
+        .then(profile => {
+            return res.json({ statusCode: 200, message: "success", profile })
+        }).catch(err => errorHandler(err, res));
 }
 
 export const updateProfile = (req, res) => {
@@ -118,14 +118,107 @@ export const updateProfile = (req, res) => {
                 if (linkedin) profile.social.linkedin = linkedin;
                 if (instagram) profile.social.instagram = instagram;
 
-                console.log(profile);
-                Candidate.findOneAndUpdate({ _id: user._id }, { $set: profile });
-                const result = {
-                    statusCode: 200,
-                    message: "Profile created",
-                    profile: profile
-                }
-                return res.json(result);
+                return Candidate.findOneAndUpdate({ _id: user._id }, { $set: profile }, { new: true })
+                    .exec()
+                    .then(candidate => {
+                        const result = {
+                            statusCode: 200,
+                            message: "Profile created",
+                            profile: candidate
+                        }
+                        return res.json(result);
+                    })
             }
-        }).catch(e => this.errorHandler(e, res));
+        }).catch(err => errorHandler(err, res));
+}
+
+export const addEducation = (req, res) => {
+    const user = req.Candidate;
+    const val = new Validator(req.body, {
+        school: "required|string",
+        degree: "required|string",
+        field_of_study: "required|string",
+        from: "required|string",
+        to: "required|string",
+    });
+    return val.check()
+        .then(matched => {
+            if (!matched) {
+                const result = {
+                    statusCode: 422,
+                    message: "Invalid inputs",
+                    errors: errorFormatter(val.errors)
+                }
+                res.statusCode = result.statusCode;
+                return res.json(result);
+            } else {
+                const { school, degree, field_of_study, from, to, current, description } = req.body;
+                const data = {
+                    school, degree, field_of_study, from, to, current, description
+                }
+
+                Candidate.findOne({ _id: user._id }, { password: 0, _v: 0 }).exec()
+                    .then(profile => {
+                        profile.education.push(data);
+                        profile.save();
+                        const result = {
+                            statusCode: 200,
+                            message: "Education Updated successfully",
+                            profile
+                        }
+                        return res.json(result);
+                    })
+            }
+        }).catch(err => errorHandler(err, res));
+}
+
+export const addExperience = (req, res) => {
+    const user = req.Candidate;
+    const val = new Validator(req.body, {
+        title: "required|string",
+        company: "required|string",
+        location: "required|string",
+        joining_date: "required|string",
+        last_date: "required|string",
+        current: "required|boolean",
+        description: "required|string"
+    });
+    return val.check()
+        .then(matched => {
+            if (!matched) {
+                const result = {
+                    statusCode: 422,
+                    message: "Invald Inputs",
+                    errors: errorFormatter(val.errors)
+                }
+                res.statusCode = result.statusCode;
+                return res.json(result);
+            } else {
+                const { title, company, location, joining_date, last_date, current, description } = req.body;
+                const data = { title, company, location, joining_date, last_date, current, description };
+                return Candidate.findOne({ _id: user._id })
+                    .exec()
+                    .then(profile => {
+                        profile.experience.push(data);
+                        profile.save();
+                        const result = {
+                            statusCode: 200,
+                            message: "Experience updated successfully.",
+                            profile
+                        }
+                        return res.json(result);
+                    });
+            }
+        })
+        .catch(err => errorHandler(err, res));
+}
+
+const errorHandler = (err, res) => {
+    log.error(err.message);
+    const result = {
+        statusCode: 500,
+        message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
+    }
+    res.statusCode = result.statusCode;
+    return res.json(result);
 }

@@ -42,6 +42,7 @@ const candidateSchema = new Schema({
         type: String,
         required: true
     },
+
     website: {
         type: String,
         required: false
@@ -99,14 +100,16 @@ const candidateSchema = new Schema({
                 required: false
             },
             to: {
-                type: Date
+                type: Date,
+                required: false
             },
             current: {
                 type: Boolean,
                 default: false
             },
             description: {
-                type: String
+                type: String,
+                required: false
             }
         }
     ],
