@@ -11,6 +11,7 @@ import VerifyEmail from "../models/email-verification";
 import moment from "moment";
 import { getRandomString } from "../utils/random";
 import { sendMail } from "../utils/mailer";
+import { raw } from "express";
 
 export const createCandidate = (req, res) => {
     const val = new Validator(req.body, {
@@ -31,7 +32,7 @@ export const createCandidate = (req, res) => {
                     message: "Invalid inputs",
                     errors: errorFormatter(val.errors)
                 }
-                res.statusCode = result.statusCode;
+                res.status(result.statusCode);
                 return res.json(result);
             } else {
                 const request = {
@@ -61,7 +62,7 @@ export const createCandidate = (req, res) => {
                                             statusCode: 200,
                                             message: "Mail has been sent"
                                         }
-                                        res.statusCode = result.statusCode;
+                                        res.status(result.statusCode);
                                         return res.json(result);
                                     }).catch(() => {
                                         return res.json(result);
@@ -100,7 +101,7 @@ export const updateProfile = (req, res) => {
                     message: "Invalid inputs",
                     errors: errorFormatter(val.errors)
                 }
-                res.statusCode = result.statusCode;
+                res.status(result.statusCode);
                 return res.json(result);
             } else {
                 const { dob, profile_img, address, bio, githubusername, website, youtube, facebook, twitter, instagram, linkedin } = req.body;
@@ -149,7 +150,7 @@ export const addEducation = (req, res) => {
                     message: "Invalid inputs",
                     errors: errorFormatter(val.errors)
                 }
-                res.statusCode = result.statusCode;
+                res.status(result.statusCode);
                 return res.json(result);
             } else {
                 const { school, degree, field_of_study, from, to, current, description } = req.body;
@@ -191,7 +192,7 @@ export const addExperience = (req, res) => {
                     message: "Invald Inputs",
                     errors: errorFormatter(val.errors)
                 }
-                res.statusCode = result.statusCode;
+                res.status(result.statusCode);
                 return res.json(result);
             } else {
                 const { title, company, location, joining_date, last_date, current, description } = req.body;
@@ -213,12 +214,129 @@ export const addExperience = (req, res) => {
         .catch(err => errorHandler(err, res));
 }
 
+export const deleteEducation = (req, res) => {
+    const user = req.Candidate;
+    const edu_id = req.params.id;
+    return Candidate.findById({ _id: user.id }, { password: 0, "__v": 0 }).exec()
+        .then(profile => {
+            if (!profile) {
+                const result = {
+                    statusCode: 404,
+                    message: "Not found",
+                }
+                res.status(result.statusCode);
+                return res.json(result);
+            } else {
+                const entry = profile.education.map(item => item.id === edu_id)[0];
+                if (entry) {
+                    profile.education.splice(profile.education.indexOf(user.id), 1);
+                    profile.save();
+                    const result = {
+                        message: "Deleted successfully.",
+                    }
+                    return res.json(result);
+                } else {
+                    const result = {
+                        statusCode: 404,
+                        message: "Not found",
+                    }
+                    res.status(result.statusCode);
+                    return res.json(result);
+                }
+            }
+        })
+        .catch(err => errorHandler(err, res));
+
+}
+
+export const deleteExperience = (req, res) => {
+    const user = req.Candidate;
+    const exp_id = req.params.id;
+    return Candidate.findById({ _id: user.id }, { password: 0, "__v": 0 }).exec()
+        .then(profile => {
+            if (!profile) {
+                const result = {
+                    statusCode: 404,
+                    message: "Not found",
+                }
+                res.status(result.statusCode);
+                return res.json(result);
+            } else {
+                const entry = profile.experience.map(item => item.id === exp_id)[0];
+                if (entry) {
+                    profile.experience.splice(profile.experience.indexOf(user.id), 1);
+                    profile.save();
+                    const result = {
+                        message: "Deleted successfully.",
+                    }
+                    return res.json(result);
+                } else {
+                    const result = {
+                        statusCode: 404,
+                        message: "Not found",
+                    }
+                    res.status(result.statusCode);
+                    return res.json(result);
+                }
+            }
+        })
+        .catch(err => errorHandler(err, res));
+
+}
+
+// export const updateEducation = (req, res) => {
+//     const user = req.Candidate;
+//     const edu_id = req.params.id;
+//     const val = new Validator(req.body, {
+//         school: "required|string",
+//         degree: "required|string",
+//         field_of_study: "required|string",
+//         from: "required|string",
+//         to: "required|string",
+//     });
+
+//     return val.check()
+//         .then(matched => {
+//             if (!matched) {
+//                 const result = {
+//                     statusCode: 422,
+//                     message: "Invald Inputs",
+//                     errors: errorFormatter(val.errors)
+//                 }
+//                 res.status(result.statusCode);
+//                 return res.json(result);
+//             } else {
+//                 const { school, degree, field_of_study, from, to, current, description } = req.body;
+//                 const data = {
+//                     school, degree, field_of_study, from, to, current, description
+//                 }
+
+//                 return Candidate.findOne({ _id: user._id })
+//                     .exec()
+//                     .then(profile => {
+//                         console.log(profile);
+//                         const updae
+//                         // profile.experience.push(data);
+//                         // profile.save();
+//                         // const result = {
+//                         //     statusCode: 200,
+//                         //     message: "Experience updated successfully.",
+//                         //     profile
+//                         // }
+//                         // return res.json(result);
+//                     });
+//             }
+//         })
+//         .catch(err => errorHandler(err, res));
+
+// }
+
 const errorHandler = (err, res) => {
     log.error(err.message);
     const result = {
         statusCode: 500,
         message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
     }
-    res.statusCode = result.statusCode;
+    res.status(result.statusCode);
     return res.json(result);
 }

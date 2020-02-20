@@ -16,7 +16,7 @@ export default class Verification {
                         statusCode: 422,
                         message: "Invalid Link"
                     }
-                    res.statusCode = result.statusCode;
+                    res.status(result.statusCode);
                     return res.json(result);
                 } else {
                     return mongoose.model(this.model).findOne({ email: record.email })
@@ -27,7 +27,7 @@ export default class Verification {
                                     statusCode: 400,
                                     message: "User not found."
                                 }
-                                res.statusCode = result.statusCode;
+                                res.status(result.statusCode);
                                 return res.json(result);
                             } if (!user.email_verified_at) {
                                 user.email_verified_at = new Date();
@@ -54,7 +54,7 @@ export default class Verification {
                     statusCode: 500,
                     message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
                 }
-                res.statusCode = result.statusCode;
+                res.status(result.statusCode);
                 return res.json(result);
             });
     }

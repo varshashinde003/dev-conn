@@ -39,7 +39,7 @@ export const createEmployer = (req, res) => {
                     message: "Invalid inputs",
                     errors: errorFormatter(val.errors)
                 }
-                res.statusCode = result.statusCode;
+                res.status(result.statusCode);
                 return res.json(result);
             } else {
                 const request = {
@@ -69,7 +69,7 @@ export const createEmployer = (req, res) => {
                                             statusCode: 200,
                                             message: "Mail has been sent"
                                         }
-                                        res.statusCode = result.statusCode;
+                                        res.status(result.statusCode);
                                         return res.json(result);
                                     }).catch(() => {
                                         return res.json(result);
@@ -86,7 +86,7 @@ export const createEmployer = (req, res) => {
                 statusCode: 500,
                 message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
             }
-            res.statusCode = result.statusCode;
+            res.status(result.statusCode);
             return res.json(result);
         });
 }

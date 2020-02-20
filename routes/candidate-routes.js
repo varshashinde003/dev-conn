@@ -4,9 +4,9 @@ import _Candidate from "../models/candidate";
 import _CandidatePasswordReset from "../models/candidate-password-reset";
 import _EmailVerification from "../models/email-verification";
 import AuthMiddleware from "../middlewares/auth-middleware";
-import activeAccountMiddleware from "../middlewares/active-account-middleware";
+// import activeAccountMiddleware from "../middlewares/active-account-middleware";
 import AuthController from "../controllers/auth-controller";
-import { createCandidate, updateProfile, getProfile, addEducation, addExperience } from "../controllers/candidate-controller";
+import { createCandidate, updateProfile, getProfile, addEducation, addExperience, deleteEducation, deleteExperience, updateEducation } from "../controllers/candidate-controller";
 import VerificationController from "../controllers/verification-controller";
 
 const candidateAuth = new AuthController("Candidate");
@@ -23,10 +23,13 @@ router.use(authMiddleware.apiAuth);
 router.get("/profile", getProfile);
 router.post("/create-profile", updateProfile);
 router.post("/add-education", addEducation);
+router.post("/delete-education/:id", deleteEducation);
+// router.post("/update-education/:id", updateEducation);
 router.post("/add-experience", addExperience);
+router.post("/delete-experience/:id", deleteExperience);
 router.post("/logout", candidateAuth.logout);
 router.post("/change-password", candidateAuth.changePassword);
 
-router.use(activeAccountMiddleware('Candidate'));
+// router.use(activeAccountMiddleware('Candidate'));
 
 export default router;

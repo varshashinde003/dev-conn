@@ -35,7 +35,7 @@ export default class AuthMiddleware {
                                 statusCode: 500,
                                 message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
                             }
-                            res.statusCode = result.statusCode;
+                            res.status(result.statusCode);
                             return res.json(result);
                         });
                 }
@@ -59,7 +59,7 @@ export default class AuthMiddleware {
             statusCode: 401,
             message: "Unauthorized."
         }
-        res.statusCode = result.statusCode;
+        res.status(result.statusCode);
         return res.json(result);
     }
 }

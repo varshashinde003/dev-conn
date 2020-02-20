@@ -7,7 +7,7 @@ export default (model) => {
                 statusCode: 403,
                 message: "Your Account is under review"
             }
-            res.statusCode = result.statusCode;
+            res.status(result.statusCode);
             return res.json(result);
         }
 
