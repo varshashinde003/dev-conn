@@ -189,7 +189,7 @@ export const addExperience = (req, res) => {
             if (!matched) {
                 const result = {
                     statusCode: 422,
-                    message: "Invald Inputs",
+                    message: "Invalid Input",
                     errors: errorFormatter(val.errors)
                 }
                 res.status(result.statusCode);
@@ -284,52 +284,108 @@ export const deleteExperience = (req, res) => {
 
 }
 
-// export const updateEducation = (req, res) => {
-//     const user = req.Candidate;
-//     const edu_id = req.params.id;
-//     const val = new Validator(req.body, {
-//         school: "required|string",
-//         degree: "required|string",
-//         field_of_study: "required|string",
-//         from: "required|string",
-//         to: "required|string",
-//     });
+export const updateEducation = (req, res) => {
+    const user = req.Candidate;
+    const edu_id = req.params.id;
+    const val = new Validator(req.body, {
+        school: "required|string",
+        degree: "required|string",
+        field_of_study: "required|string",
+        from: "required|string",
+        to: "required|string",
+    });
 
-//     return val.check()
-//         .then(matched => {
-//             if (!matched) {
-//                 const result = {
-//                     statusCode: 422,
-//                     message: "Invald Inputs",
-//                     errors: errorFormatter(val.errors)
-//                 }
-//                 res.status(result.statusCode);
-//                 return res.json(result);
-//             } else {
-//                 const { school, degree, field_of_study, from, to, current, description } = req.body;
-//                 const data = {
-//                     school, degree, field_of_study, from, to, current, description
-//                 }
+    return val.check()
+        .then(matched => {
+            if (!matched) {
+                const result = {
+                    statusCode: 422,
+                    message: "Invalid Input",
+                    errors: errorFormatter(val.errors)
+                }
+                res.status(result.statusCode);
+                return res.json(result);
+            } else {
+                const { school, degree, field_of_study, from, to, current, description } = req.body;
+                const data = {
+                    school, degree, field_of_study, from, to, current, description
+                }
 
-//                 return Candidate.findOne({ _id: user._id })
-//                     .exec()
-//                     .then(profile => {
-//                         console.log(profile);
-//                         const updae
-//                         // profile.experience.push(data);
-//                         // profile.save();
-//                         // const result = {
-//                         //     statusCode: 200,
-//                         //     message: "Experience updated successfully.",
-//                         //     profile
-//                         // }
-//                         // return res.json(result);
-//                     });
-//             }
-//         })
-//         .catch(err => errorHandler(err, res));
+                return Candidate.findOne({ _id: user._id })
+                    .exec()
+                    .then(profile => {
+                        const updateIndex = profile.education.findIndex(item => item.id === edu_id);
+                        if (updateIndex === -1) {
+                            const result = {
+                                statusCode: 404,
+                                message: "Not found",
+                            }
+                            res.status(result.statusCode);
+                            return res.json(result);
+                        }
+                        profile.education[updateIndex] = { ...data, _id: edu_id }
+                        profile.save();
+                        const result = {
+                            message: "Updated successfully",
+                        }
+                        return res.json(result);
+                    });
+            }
+        })
+        .catch(err => errorHandler(err, res));
+}
 
-// }
+export const updateExperience = (req, res) => {
+    const user = req.Candidate;
+    const edu_id = req.params.id;
+    const val = new Validator(req.body, {
+        title: "required|string",
+        company: "required|string",
+        location: "required|string",
+        joining_date: "required|string",
+        last_date: "required|string",
+        current: "required|boolean",
+        description: "required|string"
+    });
+
+    return val.check()
+        .then(matched => {
+            if (!matched) {
+                const result = {
+                    statusCode: 422,
+                    message: "Invalid Input",
+                    errors: errorFormatter(val.errors)
+                }
+                res.status(result.statusCode);
+                return res.json(result);
+            } else {
+                const { title, company, location, joining_date, last_date, current, description } = req.body;
+                const data = { title, company, location, joining_date, last_date, current, description };
+
+                return Candidate.findOne({ _id: user._id })
+                    .exec()
+                    .then(profile => {
+                        const updateIndex = profile.experience.findIndex(item => item.id === edu_id);
+                        if (updateIndex === -1) {
+                            const result = {
+                                statusCode: 404,
+                                message: "Not found",
+                            }
+                            res.status(result.statusCode);
+                            return res.json(result);
+                        }
+                        profile.experience[updateIndex] = { ...data, _id: edu_id }
+                        profile.save();
+                        const result = {
+                            message: "Updated successfully",
+                        }
+                        return res.json(result);
+                    });
+            }
+        })
+        .catch(err => errorHandler(err, res));
+
+}
 
 const errorHandler = (err, res) => {
     log.error(err.message);
