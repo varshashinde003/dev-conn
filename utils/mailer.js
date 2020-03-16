@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const sendMail = (from, fromName, to, toName, subject, body, type = "text", cc) => {
+export const sendMail = (from, fromName, to, toName, subject, body, type = "text", cc, attachements = []) => {
     const transporter = nodemailer.createTransport({
         host: process.env.MAIL_HOST,
         port: process.env.MAIL_PORT,
@@ -15,7 +15,8 @@ export const sendMail = (from, fromName, to, toName, subject, body, type = "text
         from: `${fromName} <${from}>`,
         to: `${toName} <${to}>`,
         subject: subject,
-        [type]: body
+        [type]: body,
+        attachements: attachements
     }
 
     if (cc) {

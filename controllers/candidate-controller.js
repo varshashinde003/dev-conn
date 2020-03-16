@@ -11,7 +11,6 @@ import VerifyEmail from "../models/email-verification";
 import moment from "moment";
 import { getRandomString } from "../utils/random";
 import { sendMail } from "../utils/mailer";
-import { raw } from "express";
 
 export const createCandidate = (req, res) => {
     const val = new Validator(req.body, {
@@ -386,6 +385,12 @@ export const updateExperience = (req, res) => {
         .catch(err => errorHandler(err, res));
 
 }
+
+// export const applyForJob = (req, res) => {
+//     const user = req.Candidate;
+//     console.log();
+
+// }
 
 const errorHandler = (err, res) => {
     log.error(err.message);

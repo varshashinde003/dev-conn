@@ -90,3 +90,40 @@ export const createEmployer = (req, res) => {
             return res.json(result);
         });
 }
+
+export const getProfile = (req, res) => {
+    const user = req.Employer;
+    return Employer.findOne({ _id: user._id }, { password: 0, __v: 0 }).exec()
+        .then(profile => {
+            return res.json({ message: "success", profile })
+        }).catch(err => errorFormatter(err, res));
+}
+
+export const updateProfile = (req, res) => {
+    const user = req.Employer;
+
+    const { company_name, company_logo, name, designation, address, city, state, country, company_email, company_website, company_desc, industries } = req.body;
+    const data = {};
+    if (company_name) data.company_name = company_name;
+    if (company_logo) data.company_logo = company_logo;
+    if (name) data.name = name;
+    if (designation) data.designation = designation;
+    if (address) data.address = address;
+    if (city) data.city = city;
+    if (state) data.state = state;
+    if (country) data.country = country;
+    if (company_email) data.company_email = company_email;
+    if (company_website) data.company_website = company_website;
+    if (company_desc) data.company_desc = company_desc;
+    if (industries) data.industries = industries;
+
+    return Employer.findOneAndUpdate({ _id: user._id }, { $set: data }, { fields: { company_name: 1, company_logo: 1, name: 1, designation: 1, address: 1, city: 1, state: 1, country: 1, company_email: 1, company_website: 1, company_desc: 1, industries: 1 }, useFindAndModify: false, new: true })
+        .exec()
+        .then(employer => {
+            const result = {
+                message: "Profile updated",
+                profile: employer
+            }
+            return res.json(result);
+        }).catch(err => errorHandler(err, res));
+}
