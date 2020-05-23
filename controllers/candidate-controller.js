@@ -118,12 +118,12 @@ export const updateProfile = (req, res) => {
                 if (linkedin) profile.social.linkedin = linkedin;
                 if (instagram) profile.social.instagram = instagram;
 
-                return Candidate.findOneAndUpdate({ _id: user._id }, { $set: profile }, { new: true })
+                return Candidate.findOneAndUpdate({ _id: user._id }, { $set: profile }, { new: true, select: "-password -__v" })
                     .exec()
                     .then(candidate => {
                         const result = {
                             statusCode: 200,
-                            message: "Profile created",
+                            message: "Profile updated",
                             profile: candidate
                         }
                         return res.json(result);
@@ -211,6 +211,37 @@ export const addExperience = (req, res) => {
             }
         })
         .catch(err => errorHandler(err, res));
+}
+
+export const updateSkills = (req, res) => {
+    const user = req.Candidate;
+    const val = new Validator(req.body, {
+        skills: "required|array",
+    });
+    return val.check()
+        .then(matched => {
+            if (!matched) {
+                const result = {
+                    statusCode: 422,
+                    message: "Invalid inputs",
+                    errors: errorFormatter(val.errors)
+                }
+                res.status(result.statusCode);
+                return res.json(result);
+            } else {
+                const { skills } = req.body;
+                Candidate.findOneAndUpdate({ _id: user._id }, { $set: { skills } }, { useFindAndModify: false, new: true, select: "-password -__v" }).exec()
+                    .then(profile => {
+                        profile.save();
+                        const result = {
+                            statusCode: 200,
+                            message: "Skills Updated successfully",
+                            profile
+                        }
+                        return res.json(result);
+                    })
+            }
+        }).catch(err => errorHandler(err, res));
 }
 
 export const deleteEducation = (req, res) => {

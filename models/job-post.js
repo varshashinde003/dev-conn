@@ -1,29 +1,32 @@
 import { Schema, model } from "mongoose";
 
-const jobSchema = new Schema({
+const jobPostSchema = new Schema({
     title: {
         type: String,
         required: true
     },
-    conpany: {
+    slug: {
+        type: String,
+        required: true 
+    },
+    company_id: {
         type: String,
         required: true
     },
-    designation: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    location: {
+    company: {
         type: String,
         required: true
     },
-    posted_on: {
-        type: Date,
-        required: true
+    contact_name: {
+        type: String,
+        required: false
+    },
+    contact_email: {
+        type: String,
+        required: false
     },
     expire_on: {
-        type: Date,
+        type: String,
         required: true
     },
     experience: {
@@ -39,11 +42,15 @@ const jobSchema = new Schema({
         required: true
     },
     summary: {
-        type: Text,
+        type: String,
         required: true
     },
     description: {
-        type: Text,
+        type: String,
+        required: true
+    },
+    key_skills: {
+        type: Array,
         required: true
     },
     city: {
@@ -58,23 +65,12 @@ const jobSchema = new Schema({
         type: String,
         required: true
     },
-    url: {
+    application_url: {
         type: String,
         required: false
     },
     no_of_applicants: {
         type: String,
-        required: true
-    },
-    is_verified: {
-        type: Boolean,
-        default: false,
-        required: true
-    },
-    is_active: {
-        type: Boolean,
-        default: false,
-        required: true
     },
     salary: {
         type: String,
@@ -87,6 +83,38 @@ const jobSchema = new Schema({
     industry: {
         type: String,
         required: false
+    },
+    benefits: {
+        type: String,
+        required: false
+    },
+    work_remotely: {
+        type: Boolean,
+        default: false,
+    },
+    urgent_hiring: {
+        type: Boolean,
+        default: false,
+    },
+    is_approved: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    is_verified: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    is_active: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    is_live: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 }, { timestamps: true });
-export default model("Job", jobSchema);
+export default model("JobPost", jobPostSchema);

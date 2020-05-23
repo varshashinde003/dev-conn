@@ -4,6 +4,7 @@ import indexRoutes from "../routes/index-routes";
 import adminRoutes from "../routes/admin-routes";
 import employerRoutes from "../routes/employer-routes";
 import candidateRoutes from "../routes/candidate-routes";
+import jobRoutes from "../routes/job-routes";
 import log from "../utils/logger";
 import cookieParser from "cookie-parser";
 config();
@@ -23,6 +24,7 @@ app.use(cookieParser(process.env.APP_KEY));
 app.use("/admin", adminRoutes);
 app.use("/employer", employerRoutes);
 app.use("/candidate", candidateRoutes);
+app.use("/job", jobRoutes);
 app.use("/", indexRoutes);
 
 app.use((err, req, res, next) => {

@@ -80,15 +80,7 @@ export const createEmployer = (req, res) => {
                 })
             }
         })
-        .catch(err => {
-            log.error(err.message);
-            const result = {
-                statusCode: 500,
-                message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
-            }
-            res.status(result.statusCode);
-            return res.json(result);
-        });
+        .catch(err => errorHandler(err, res));
 }
 
 export const getProfile = (req, res) => {
@@ -117,7 +109,7 @@ export const updateProfile = (req, res) => {
     if (company_desc) data.company_desc = company_desc;
     if (industries) data.industries = industries;
 
-    return Employer.findOneAndUpdate({ _id: user._id }, { $set: data }, { fields: { company_name: 1, company_logo: 1, name: 1, designation: 1, address: 1, city: 1, state: 1, country: 1, company_email: 1, company_website: 1, company_desc: 1, industries: 1 }, useFindAndModify: false, new: true })
+    return Employer.findOneAndUpdate({ _id: user._id }, { $set: data }, { useFindAndModify: false, new: true, select: "-password -__v" })
         .exec()
         .then(employer => {
             const result = {
@@ -126,4 +118,14 @@ export const updateProfile = (req, res) => {
             }
             return res.json(result);
         }).catch(err => errorHandler(err, res));
+}
+
+const errorHandler = (err, res) => {
+    log.error(err.message);
+    const result = {
+        statusCode: 500,
+        message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
+    }
+    res.status(result.statusCode);
+    return res.json(result);
 }

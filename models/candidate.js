@@ -42,7 +42,6 @@ const candidateSchema = new Schema({
         type: String,
         required: true
     },
-
     website: {
         type: String,
         required: false
@@ -52,6 +51,10 @@ const candidateSchema = new Schema({
     },
     githubusername: {
         type: String
+    },
+    skills: {
+        type: [String],
+        required: true
     },
     experience: [
         {
