@@ -80,6 +80,10 @@ const jobPostSchema = new Schema({
         type: String,
         required: true
     },
+    keywords: {
+        type: Array,
+        required: true
+    },
     industry: {
         type: String,
         required: false
@@ -101,20 +105,11 @@ const jobPostSchema = new Schema({
         default: false,
         required: true
     },
-    is_verified: {
-        type: Boolean,
-        default: false,
-        required: true
-    },
     is_active: {
-        type: Boolean,
-        default: false,
-        required: true
-    },
-    is_live: {
         type: Boolean,
         default: false,
         required: true
     }
 }, { timestamps: true });
+
 export default model("JobPost", jobPostSchema);

@@ -3,12 +3,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ejs from "ejs";
 import path from "path";
-import { getRandomNumberByRange } from "../utils/random";
+import { getRandomNumberByRange } from "../../utils/random";
 import moment from "moment";
-import { sendMail } from "../utils/mailer";
-import log from "../utils/logger";
-import Validator from "../utils/validator";
-import errorFormatter from "../utils/error-formatter";
+import { sendMail } from "../../utils/mailer";
+import log from "../../utils/logger";
+import Validator from "../../utils/validator";
+import errorFormatter from "../../utils/error-formatter";
 
 export default class Auth {
     constructor(model = "Employer", loginWith = "email") {
@@ -77,10 +77,9 @@ export default class Auth {
                                     return result;
                                 }
                             }
-                        })
+                        });
                 }
-            })
-            .catch(err => {
+            }).catch(err => {
                 log.error(err.message);
                 const result = {
                     statusCode: 500,
@@ -93,13 +92,13 @@ export default class Auth {
     webLogin(req, res) {
         this.login(req).then(result => {
             res.cookie("auth_token", result.token, { signed: true }).json(result);
-        })
+        });
     }
 
     apiLogin(req, res) {
         this.login(req).then(result => {
             return res.json(result);
-        })
+        });
     }
 
     getProfile(req, res) {
@@ -135,7 +134,7 @@ export default class Auth {
                                             message: "Password has been updated successfuly."
                                         }
                                         return res.json(result);
-                                    })
+                                    });
                             } else {
                                 const result = {
                                     statusCode: 422,
@@ -196,8 +195,8 @@ export default class Auth {
                                                         return res.json(result);
                                                     });
                                             }
-                                        })
-                                    })
+                                        });
+                                    });
                             } else {
                                 const result = {
                                     statusCode: 422,
@@ -205,7 +204,7 @@ export default class Auth {
                                 }
                                 return res.json(result);
                             }
-                        })
+                        });
                 }
             }).catch(err => this.errorHandler(err, res));
     }
@@ -261,15 +260,14 @@ export default class Auth {
                                                         message: "Password has been updated successfully"
                                                     }
                                                     return res.json(result);
-                                                })
-                                        })
+                                                });
+                                        });
                                 }
                             }
-                        })
+                        });
                 }
 
-            })
-            .catch(err => this.errorHandler(err, res));
+            }).catch(err => this.errorHandler(err, res));
     }
 
     errorHandler(err, res) {

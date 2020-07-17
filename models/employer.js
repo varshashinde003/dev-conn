@@ -66,10 +66,9 @@ const employerSchema = new Schema({
         type: Date,
         required: false
     },
-    is_contact_verified: {
-        type: Boolean,
-        default: false,
-        required: true
+    contact_verified_at: {
+        type: Date,
+        required: false
     },
     account_activated_on: {
         type: Date,

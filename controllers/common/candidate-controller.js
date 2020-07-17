@@ -3,14 +3,14 @@ import bcrypt from "bcrypt";
 import uniqid from "uniqid";
 import ejs from "ejs";
 import path from "path";
-import Validator from "../utils/validator";
-import errorFormatter from "../utils/error-formatter";
-import log from "../utils/logger";
-import Candidate from "../models/candidate";
-import VerifyEmail from "../models/email-verification";
+import Validator from "../../utils/validator";
+import errorFormatter from "../../utils/error-formatter";
+import log from "../../utils/logger";
+import Candidate from "../../models/candidate";
+import VerifyEmail from "../../models/email-verification";
 import moment from "moment";
-import { getRandomString } from "../utils/random";
-import { sendMail } from "../utils/mailer";
+import { getRandomString } from "../../utils/random";
+import { sendMail } from "../../utils/mailer";
 
 export const createCandidate = (req, res) => {
     const val = new Validator(req.body, {
@@ -67,9 +67,9 @@ export const createCandidate = (req, res) => {
                                         return res.json(result);
                                     });
                                 }
-                            })
-                        })
-                })
+                            });
+                        });
+                });
             }
         })
         .catch(err => errorHandler(err, res));
@@ -127,7 +127,7 @@ export const updateProfile = (req, res) => {
                             profile: candidate
                         }
                         return res.json(result);
-                    })
+                    });
             }
         }).catch(err => errorHandler(err, res));
 }
@@ -167,7 +167,7 @@ export const addEducation = (req, res) => {
                             profile
                         }
                         return res.json(result);
-                    })
+                    });
             }
         }).catch(err => errorHandler(err, res));
 }
@@ -239,7 +239,7 @@ export const updateSkills = (req, res) => {
                             profile
                         }
                         return res.json(result);
-                    })
+                    });
             }
         }).catch(err => errorHandler(err, res));
 }
@@ -274,8 +274,7 @@ export const deleteEducation = (req, res) => {
                     return res.json(result);
                 }
             }
-        })
-        .catch(err => errorHandler(err, res));
+        }).catch(err => errorHandler(err, res));
 
 }
 

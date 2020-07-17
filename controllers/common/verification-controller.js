@@ -1,5 +1,5 @@
-import mongoose, { model } from "mongoose";
-import log from "../utils/logger";
+import { model } from "mongoose";
+import log from "../../utils/logger";
 
 export default class Verification {
     constructor(model = "Employer") {
@@ -8,7 +8,7 @@ export default class Verification {
     }
     verifyEmail(req, res) {
         const token = req.params.token;
-        return mongoose.model("VerifyEmail").findOneAndDelete({ link: token })
+        return model("VerifyEmail").findOneAndDelete({ link: token })
             .exec()
             .then(record => {
                 if (!record) {
@@ -19,7 +19,7 @@ export default class Verification {
                     res.status(result.statusCode);
                     return res.json(result);
                 } else {
-                    return mongoose.model(this.model).findOne({ email: record.email })
+                    return model(this.model).findOne({ email: record.email })
                         .exec()
                         .then(user => {
                             if (!user) {

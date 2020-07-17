@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import _JobPost from "../models/job-post";
 import AuthMiddleware from "../middlewares/auth-middleware";
-import { addPost, getPostDetails, getAllPosts, editPost, deletePost } from "../controllers/job-post-controller";
+import { addPost, getPostDetails, getAllPosts, editPost, deletePost } from "../controllers/common/job-post-controller";
 const authMiddleware = new AuthMiddleware("Employer");
 
 router.get("/all-posts", getAllPosts);

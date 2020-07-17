@@ -51,4 +51,4 @@ webpack(clientConfig('development')).watch({}, function (error, stats) {
 
 nodemon(nodemonOptions).on("start", function () {
     console.log("Nodemon is watching for file changes");
-})
+});

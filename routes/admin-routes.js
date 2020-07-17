@@ -3,7 +3,7 @@ const router = express.Router();
 import _Admin from "../models/admin";
 import _AdminPasswordReset from "../models/admin-password-reset";
 import AuthMiddleware from "../middlewares/auth-middleware";
-import AuthController from "../controllers/auth-controller";
+import AuthController from "../controllers/common/auth-controller";
 
 const adminAuth = new AuthController("Admin");
 const authMiddleware = new AuthMiddleware("Admin");

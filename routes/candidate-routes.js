@@ -5,9 +5,9 @@ import _CandidatePasswordReset from "../models/candidate-password-reset";
 import _EmailVerification from "../models/email-verification";
 import AuthMiddleware from "../middlewares/auth-middleware";
 // import activeAccountMiddleware from "../middlewares/active-account-middleware";
-import AuthController from "../controllers/auth-controller";
-import { createCandidate, updateProfile, getProfile, addEducation, addExperience, deleteEducation, deleteExperience, updateEducation, updateExperience, updateSkills } from "../controllers/candidate-controller";
-import VerificationController from "../controllers/verification-controller";
+import AuthController from "../controllers/common/auth-controller";
+import { createCandidate, updateProfile, getProfile, addEducation, addExperience, deleteEducation, deleteExperience, updateEducation, updateExperience, updateSkills } from "../controllers/common/candidate-controller";
+import VerificationController from "../controllers/common/verification-controller";
 
 const candidateAuth = new AuthController("Candidate");
 const authMiddleware = new AuthMiddleware("Candidate");

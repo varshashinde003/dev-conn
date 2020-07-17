@@ -5,9 +5,9 @@ import _EmployerPasswordReset from "../models/employer-password-reset";
 import _EmailVerification from "../models/email-verification";
 import AuthMiddleware from "../middlewares/auth-middleware";
 import activeAccountMiddleware from "../middlewares/active-account-middleware";
-import AuthController from "../controllers/auth-controller";
-import { createEmployer, getProfile, updateProfile } from "../controllers/employer-controller";
-import VerificationController from "../controllers/verification-controller";
+import AuthController from "../controllers/common/auth-controller";
+import { createEmployer, getProfile, updateProfile } from "../controllers/common/employer-controller";
+import VerificationController from "../controllers/common/verification-controller";
 
 const employerAuth = new AuthController("Employer");
 const authMiddleware = new AuthMiddleware("Employer");

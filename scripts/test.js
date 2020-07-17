@@ -7,4 +7,4 @@ sendMail("varshashinde003@gmail.com", "Varsha", "salman.ekport@gmail.com", "Salm
     console.log("Mail sent successfully");
 }).catch(err => {
     console.log("Error sending email", err);
-})
+});

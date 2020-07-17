@@ -3,14 +3,14 @@ import bcrypt from "bcrypt";
 import uniqid from "uniqid";
 import ejs from "ejs";
 import path from "path";
-import Validator from "../utils/validator";
-import errorFormatter from "../utils/error-formatter";
-import log from "../utils/logger";
-import Employer from "../models/employer";
-import VerifyEmail from "../models/email-verification";
+import Validator from "../../utils/validator";
+import errorFormatter from "../../utils/error-formatter";
+import log from "../../utils/logger";
+import Employer from "../../models/employer";
+import VerifyEmail from "../../models/email-verification";
 import moment from "moment";
-import { getRandomString } from "../utils/random";
-import { sendMail } from "../utils/mailer";
+import { getRandomString } from "../../utils/random";
+import { sendMail } from "../../utils/mailer";
 
 export const createEmployer = (req, res) => {
     const val = new Validator(req.body, {
@@ -75,19 +75,18 @@ export const createEmployer = (req, res) => {
                                         return res.json(result);
                                     });
                                 }
-                            })
-                        })
-                })
+                            });
+                        });
+                });
             }
-        })
-        .catch(err => errorHandler(err, res));
+        }).catch(err => errorHandler(err, res));
 }
 
 export const getProfile = (req, res) => {
     const user = req.Employer;
     return Employer.findOne({ _id: user._id }, { password: 0, __v: 0 }).exec()
         .then(profile => {
-            return res.json({ message: "success", profile })
+            return res.json({ message: "success", profile });
         }).catch(err => errorFormatter(err, res));
 }
 

@@ -1,21 +1,13 @@
 import { Schema, model } from "mongoose";
 
 const applicationSchema = new Schema({
-    user: {
+    candidate_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'job'
+        ref: 'candidate'
     },
-    name: {
-        type: String,
-        required: true
-    },
-    contact: {
-        type: String,
-        required: false
-    },
-    email: {
-        type: String,
-        required: true
+    job_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'jobPost'
     },
     cover_letter: {
         type: String,
