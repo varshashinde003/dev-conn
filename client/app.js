@@ -1,12 +1,12 @@
-import React from "react";
-import Button from '@material-ui/core/Button';
+import React from 'react'
+import Button from '@material-ui/core/Button'
 
 const App = () => {
-    return (
-        <Button variant="contained" color="primary">
+  return (
+    <Button variant="contained" color="primary">
             Hello World
-        </Button>
-    );
+    </Button>
+  )
 }
 
-export default App;
+export default App

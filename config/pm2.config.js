@@ -1,5 +1,5 @@
-const path = require("path");
-const paths = require("./paths");
+const path = require('path')
+const paths = require('./paths')
 
 module.exports = {
   apps: [{
@@ -30,4 +30,4 @@ module.exports = {
       'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
     }
   }
-};
+}

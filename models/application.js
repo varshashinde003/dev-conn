@@ -1,22 +1,49 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose'
+import Counter from './counter'
+
+const attachmentSchema = new Schema({
+  secureUrl: {
+    type: String,
+    required: true
+  },
+  publicId: {
+    type: String,
+    required: true
+  }
+})
 
 const applicationSchema = new Schema({
-    candidate_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'candidate'
-    },
-    job_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'jobPost'
-    },
-    cover_letter: {
-        type: String,
-        required: false
-    },
-    resume: {
-        type: String,
-        required: true
-    }
-}, { timestamps: true });
+  id: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  candidateId: {
+    type: Number,
+    required: true
+  },
+  jobId: {
+    type: Number,
+    required: true
+  },
+  coverLetter: {
+    type: String,
+    required: false
+  },
+  status: {
+    type: String,
+    required: true
+  },
+  attachments: [attachmentSchema]
+}, { timestamps: true })
 
-export default model("Application", applicationSchema);
+applicationSchema.pre('validate', false, function (next) {
+  const doc = this
+  Counter.findOneAndUpdate({ model: 'Application' }, { $inc: { sequence: 1 } }, { upsert: true, new: true }, (error, counter) => {
+    if (error) { return next(error) }
+    doc.id = counter.sequence
+    next()
+  })
+})
+
+export default model('Application', applicationSchema)

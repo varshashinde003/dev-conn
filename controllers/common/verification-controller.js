@@ -1,61 +1,62 @@
-import { model } from "mongoose";
-import log from "../../utils/logger";
+import { model } from 'mongoose'
+import log from '../../utils/logger'
 
 export default class Verification {
-    constructor(model = "Employer") {
-        this.model = model;
-        this.verifyEmail = this.verifyEmail.bind(this);
-    }
-    verifyEmail(req, res) {
-        const token = req.params.token;
-        return model("VerifyEmail").findOneAndDelete({ link: token })
+  constructor (model = 'Employer') {
+    this.model = model
+    this.verifyEmail = this.verifyEmail.bind(this)
+  }
+
+  verifyEmail (req, res) {
+    const token = req.params.token
+    return model('VerifyEmail').findOneAndDelete({ link: token })
+      .exec()
+      .then(record => {
+        if (!record) {
+          const result = {
+            statusCode: 422,
+            message: 'Invalid Link'
+          }
+          res.status(result.statusCode)
+          return res.json(result)
+        } else {
+          return model(this.model).findOne({ email: record.email })
             .exec()
-            .then(record => {
-                if (!record) {
-                    const result = {
-                        statusCode: 422,
-                        message: "Invalid Link"
-                    }
-                    res.status(result.statusCode);
-                    return res.json(result);
-                } else {
-                    return model(this.model).findOne({ email: record.email })
-                        .exec()
-                        .then(user => {
-                            if (!user) {
-                                const result = {
-                                    statusCode: 400,
-                                    message: "User not found."
-                                }
-                                res.status(result.statusCode);
-                                return res.json(result);
-                            } if (!user.email_verified_at) {
-                                user.email_verified_at = new Date();
-                                user.save();
-                                const result = {
-                                    statusCode: 200,
-                                    message: "Verified successfully"
-                                }
-                                // return res.render("status", { status: result.statusCode });
-                                return res.json(result);
-                            } else {
-                                const result = {
-                                    statusCode: 200,
-                                    message: "Email already verified"
-                                }
-                                return res.json(result);
-                            }
-                        });
-                }
-            })
-            .catch(err => {
-                log.error(err.message);
+            .then(user => {
+              if (!user) {
                 const result = {
-                    statusCode: 500,
-                    message: process.env.DEBUG === "true" ? err.message : "Something went wrong. Please try again later"
+                  statusCode: 400,
+                  message: 'User not found.'
                 }
-                res.status(result.statusCode);
-                return res.json(result);
-            });
-    }
+                res.status(result.statusCode)
+                return res.json(result)
+              } if (!user.emailVerifiedAt) {
+                user.emailVerifiedAt = new Date()
+                user.save()
+                const result = {
+                  statusCode: 200,
+                  message: 'Verified successfully'
+                }
+                // return res.render("status", { status: result.statusCode });
+                return res.json(result)
+              } else {
+                const result = {
+                  statusCode: 200,
+                  message: 'Email already verified'
+                }
+                return res.json(result)
+              }
+            })
+        }
+      })
+      .catch(err => {
+        log.error(err.message)
+        const result = {
+          statusCode: 500,
+          message: process.env.DEBUG === 'true' ? err.message : 'Something went wrong. Please try again later'
+        }
+        res.status(result.statusCode)
+        return res.json(result)
+      })
+  }
 }

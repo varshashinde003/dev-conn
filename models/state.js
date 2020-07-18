@@ -1,10 +1,18 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose'
 
-const industrySchema = new Schema({
-    title: {
+const stateSchema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  cities: [
+    {
+      title: {
         type: String,
         required: true
+      }
     }
-}, { timestamps: true });
+  ]
+}, { timestamps: true })
 
-export default model("Industry", industrySchema);
+export default model('State', stateSchema)
