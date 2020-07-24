@@ -8,7 +8,7 @@ import _EmailVerification from '../models/email-verification'
 import AuthMiddleware from '../middlewares/auth-middleware'
 // import activeAccountMiddleware from '../middlewares/active-account-middleware'
 import AuthController from '../controllers/common/auth-controller'
-import { createCandidate, updateProfile, getProfile, addEducation, addExperience, deleteEducation, deleteExperience, updateEducation, updateExperience, updateSkills } from '../controllers/common/candidate-controller'
+import { createCandidate, updateProfile, getProfile, addEducation, addExperience, deleteEducation, deleteExperience, updateEducation, updateExperience, updateSkills, applyForJob } from '../controllers/common/candidate-controller'
 import VerificationController from '../controllers/common/verification-controller'
 const router = express.Router()
 
@@ -34,6 +34,7 @@ router.post('/delete-experience/:id', deleteExperience)
 router.post('/update-skills', updateSkills)
 router.post('/logout', candidateAuth.logout)
 router.post('/change-password', candidateAuth.changePassword)
+router.post('/apply/:id', applyForJob)
 
 // router.use(activeAccountMiddleware('Candidate'))
 

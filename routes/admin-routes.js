@@ -7,6 +7,7 @@ import AuthMiddleware from '../middlewares/auth-middleware'
 import AuthController from '../controllers/common/auth-controller'
 import { createEmployer, getEmployerProfile, updateProfile, getAllEmployers, activateEmployer } from '../controllers/admin/employer-controller'
 import { activateCandidate, getAllCandidates, getCandidateProfile } from '../controllers/admin/candidate-controller'
+import { approveJobPost, updateIsFeatured, updateIsTop } from '../controllers/admin/job-post-controller'
 const router = express.Router()
 
 const adminAuth = new AuthController('Admin')
@@ -33,5 +34,10 @@ router.post('/activate-employer/:id', activateEmployer)
 router.get('/all-candidates', getAllCandidates)
 router.post('/activate-candidate/:id', activateCandidate)
 router.get('/candidate-profile/:id', getCandidateProfile)
+
+// Job Post routes
+router.post('/approve-job-post/:id', approveJobPost)
+router.post('/update-featured/:id', updateIsFeatured)
+router.post('/update-top/:id', updateIsTop)
 
 export default router

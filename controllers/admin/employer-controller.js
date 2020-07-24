@@ -176,21 +176,27 @@ export const updateProfile = (req, res) => {
 }
 
 export const activateEmployer = (req, res) => {
-  const data = {
-    accountActivatedOn: new Date()
-  }
   return Employer.findOneAndUpdate(
     { id: req.params.id },
-    { $set: data },
+    { $set: { accountActivatedOn: new Date() } },
     { useFindAndModify: false, new: true, select: '-password -__v' }
   )
     .exec()
     .then((employer) => {
-      const result = {
-        message: 'Profile updated',
-        profile: employer
+      if (employer) {
+        const result = {
+          message: 'Profile updated',
+          profile: employer
+        }
+        return res.json(result)
+      } else {
+        const result = {
+          statusCode: 404,
+          message: 'Profile not found'
+        }
+        res.status(result.statusCode)
+        return res.json(result)
       }
-      return res.json(result)
     })
     .catch((err) => errorHandler(err, res))
 }

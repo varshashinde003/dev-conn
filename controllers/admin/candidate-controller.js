@@ -18,21 +18,27 @@ export const getCandidateProfile = (req, res) => {
 }
 
 export const activateCandidate = (req, res) => {
-  const data = {
-    accountActivatedOn: new Date()
-  }
   return Candidate.findOneAndUpdate(
     { id: req.params.id },
-    { $set: data },
+    { $set: { accountActivatedOn: new Date() } },
     { useFindAndModify: false, new: true, select: '-password -__v' }
   )
     .exec()
     .then((candidate) => {
-      const result = {
-        message: 'Profile updated',
-        profile: candidate
+      if (candidate) {
+        const result = {
+          message: 'Profile updated',
+          profile: candidate
+        }
+        return res.json(result)
+      } else {
+        const result = {
+          statusCode: 404,
+          message: 'Profile not found'
+        }
+        res.status(result.statusCode)
+        return res.json(result)
       }
-      return res.json(result)
     })
     .catch((err) => errorHandler(err, res))
 }

@@ -11,7 +11,7 @@ import activeAccountMiddleware from '../middlewares/active-account-middleware'
 import AuthController from '../controllers/common/auth-controller'
 import { createEmployer, getProfile, updateProfile } from '../controllers/common/employer-controller'
 import VerificationController from '../controllers/common/verification-controller'
-import { addPost, editPost, deletePost } from '../controllers/employer/job-post-controller'
+import { addPost, editPost, deletePost, activateJobPost } from '../controllers/employer/job-post-controller'
 const router = express.Router()
 
 const employerAuth = new AuthController('Employer')
@@ -34,6 +34,7 @@ router.post('/change-password', employerAuth.changePassword)
 router.post('/add-post', addPost)
 router.post('/edit-post/:slug', editPost)
 router.delete('/delete-post/:id', deletePost)
+router.post('/activate-job-post/:id', activateJobPost)
 
 // router.use(activeAccountMiddleware('Employer'))
 

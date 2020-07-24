@@ -11,6 +11,8 @@ import VerifyEmail from '../../models/email-verification'
 import moment from 'moment'
 import { getRandomString } from '../../utils/random'
 import { sendMail } from '../../utils/mailer'
+import JobPost from '../../models/job-post'
+import Application from '../../models/application'
 
 export const createCandidate = (req, res) => {
   const val = new Validator(req.body, {
@@ -413,11 +415,69 @@ export const updateExperience = (req, res) => {
     .catch(err => errorHandler(err, res))
 }
 
-// export const applyForJob = (req, res) => {
-//     const user = req.Candidate;
-//     console.log();
+export const applyForJob = (req, res) => {
+  const user = req.Candidate
+  const jobId = req.params.id
 
-// }
+  const val = new Validator(req.body, {
+    attachments: 'required|array',
+    'attachments.*.publicId': 'required|string',
+    'attachments.*.secureUrl': 'required|string'
+  })
+
+  return val.check()
+    .then(matched => {
+      if (!matched) {
+        const result = {
+          statusCode: 422,
+          message: 'Invalid inputs',
+          errors: errorFormatter(val.errors)
+        }
+        res.status(result.statusCode)
+        return res.json(result)
+      } else {
+        const { attachments, coverLetter } = req.body
+        const data = { attachments, coverLetter, jobId, candidateId: user.id }
+
+        return JobPost.findOne({ id: jobId, isApproved: true, isActive: true })
+          .exec()
+          .then(post => {
+            if (post) {
+              return Application.countDocuments({ jobId, candidateId: user.id })
+                .exec()
+                .then(applicationCount => {
+                  if (applicationCount) {
+                    const result = {
+                      statusCode: 422,
+                      message: 'Already applied'
+                    }
+                    res.status(result.statusCode)
+                    return res.json(result)
+                  } else {
+                    return Application.create(data)
+                      .then(application => {
+                        const result = {
+                          statusCode: 200,
+                          message: 'Applied successfully',
+                          application
+                        }
+                        return res.json(result)
+                      })
+                  }
+                })
+            } else {
+              const result = {
+                statusCode: 404,
+                message: 'Post not found'
+              }
+              res.status(result.statusCode)
+              return res.json(result)
+            }
+          })
+      }
+    })
+    .catch(err => errorHandler(err, res))
+}
 
 const errorHandler = (err, res) => {
   log.error(err.message)

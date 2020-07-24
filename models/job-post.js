@@ -16,7 +16,7 @@ const jobPostSchema = new Schema({
     required: true
   },
   employerId: {
-    type: String,
+    type: Number,
     required: true
   },
   contactName: {

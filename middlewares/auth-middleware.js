@@ -20,7 +20,7 @@ export default class AuthMiddleware {
         } else {
           const authModel = mongoose.model(this.model)
           authModel.findOne({ _id: decoded._id })
-            .select('_id name email accountActivatedOn createdAt updatedAt')
+            .select('_id id name email accountActivatedOn createdAt updatedAt')
             .exec()
             .then(user => {
               if (!user) {

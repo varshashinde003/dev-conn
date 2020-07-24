@@ -13,7 +13,8 @@ export const addPost = (req, res) => {
     contactEmail: 'required|string',
     expireOn: 'required|string',
     experience: 'required|string',
-    coverImg: 'required|string',
+    coverImgSecureUrl: 'required|string',
+    coverImgPublicId: 'required|string',
     education: 'required|string',
     summary: 'required|string',
     description: 'required|string',
@@ -37,11 +38,11 @@ export const addPost = (req, res) => {
         res.status(result.statusCode)
         return res.json(result)
       } else {
-        const { title, company, contactName, contactEmail, expireOn, experience, coverImg, education, summary, description, keySkills, city, state, country, salary, jobType, keywords, industry } = req.body
+        const { title, company, contactName, contactEmail, expireOn, experience, coverImgSecureUrl, coverImgPublicId, education, summary, description, keySkills, city, state, country, salary, jobType, keywords, industry } = req.body
         const employerId = user.id
         const slug = `${title.toLowerCase().replace(/ /g, '-')}-${uniqid(10)}`
         const data = {
-          title, slug, employerId, company, contactName, contactEmail, expireOn, experience, coverImg, education, summary, description, keySkills, city, state, country, salary, jobType, keywords, industry
+          title, slug, employerId, company, contactName, contactEmail, expireOn, experience, coverImgSecureUrl, coverImgPublicId, education, summary, description, keySkills, city, state, country, salary, jobType, keywords, industry
         }
         JobPost.create(data).then(post => {
           post.save()
@@ -106,6 +107,13 @@ export const editPost = (req, res) => {
     }).catch(err => errorHandler(err, res))
 }
 
+export const getAllPosts = (req, res) => {
+  JobPost.find({ employerId: req.Employer.id }).exec()
+    .then(posts => {
+      return res.json(posts)
+    }).catch(err => errorHandler(err, res))
+}
+
 export const deletePost = (req, res) => {
   const { id } = req.params
   return JobPost.findByIdAndRemove(id, { useFindAndModify: false }).exec()
@@ -124,6 +132,47 @@ export const deletePost = (req, res) => {
         return res.json(result)
       }
     })
+}
+
+export const activateJobPost = (req, res) => {
+  const val = new Validator(req.body, {
+    isActive: 'required|boolean'
+  })
+  return val.check()
+    .then(matched => {
+      if (!matched) {
+        const result = {
+          statusCode: 422,
+          message: 'Invalid inputs',
+          errors: errorFormatter(val.errors)
+        }
+        res.status(result.statusCode)
+        return res.json(result)
+      } else {
+        return JobPost.findOneAndUpdate(
+          { id: req.params.id },
+          { $set: { isActive: req.body.isActive } },
+          { useFindAndModify: false, new: true, select: '-password -__v' }
+        )
+          .exec()
+          .then((post) => {
+            if (post) {
+              const result = {
+                message: 'Post updated',
+                post
+              }
+              return res.json(result)
+            } else {
+              const result = {
+                statusCode: 404,
+                message: 'Post not found'
+              }
+              res.status(result.statusCode)
+              return res.json(result)
+            }
+          })
+      }
+    }).catch((err) => errorHandler(err, res))
 }
 
 const errorHandler = (err, res) => {
