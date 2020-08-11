@@ -1,12 +1,19 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
+import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import routes from './router'
+import { createBrowserHistory } from 'history'
 
-const App = () => {
+import { renderRoutes } from 'react-router-config'
+
+const history = createBrowserHistory({})
+
+const app = () => {
   return (
-    <Button variant="contained" color="primary">
-            Hello World
-    </Button>
+    <Router history={history}>
+      <Switch>
+        {renderRoutes(routes)}
+      </Switch>
+    </Router>
   )
 }
-
-export default App
+export default app
