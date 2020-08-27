@@ -96,6 +96,16 @@ export default class Auth {
     })
   }
 
+  // webLogin(req, res) {
+  //   this.login(req).then(result => {
+  //     res.statusCode = result.statusCode
+  //     // res.cookie(`${this.model.toLowerCase()}_auth_token`, result.token, { signed: true }).json(result);
+  //     req.session[`${this.model.toLowerCase()}_auth_token`] = result.token
+  //     req.session.test = '111'
+  //     return res.json(result)
+  //   })
+  // }
+
   apiLogin (req, res) {
     this.login(req).then(result => {
       return res.json(result)

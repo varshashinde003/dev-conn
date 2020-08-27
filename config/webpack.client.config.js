@@ -12,9 +12,7 @@ module.exports = function (webpackEnv) {
   return {
     mode: webpackEnv,
     devtool: false,
-    entry: [
-      paths.clientEntry
-    ],
+    entry: [paths.clientEntry],
     output: {
       path: paths.clientBuildDir,
       pathinfo: false,
@@ -27,46 +25,46 @@ module.exports = function (webpackEnv) {
     optimization: {
       minimize: isProduction,
       minimizer: [
-        isProduction && new TerserPlugin({
-          terserOptions: {
-            parse: {
-              ecma: 8
+        isProduction &&
+          new TerserPlugin({
+            terserOptions: {
+              parse: {
+                ecma: 8
+              },
+              compress: {
+                ecma: 5,
+                warnings: false,
+                comparisons: false,
+                inline: 2
+              },
+              mangle: {
+                safari10: true
+              },
+              keep_classnames: true,
+              keep_fnames: true,
+              output: {
+                ecma: 5,
+                comments: false,
+                ascii_only: true
+              }
             },
-            compress: {
-              ecma: 5,
-              warnings: false,
-              comparisons: false,
-              inline: 2
-            },
-            mangle: {
-              safari10: true
-            },
-            keep_classnames: true,
-            keep_fnames: true,
-            output: {
-              ecma: 5,
-              comments: false,
-              ascii_only: true
-            }
-          },
-          parallel: true,
-          cache: true,
-          sourceMap: false
-        }),
+            parallel: true,
+            cache: true,
+            sourceMap: false
+          }),
 
         new OptimizeCSSAssetsPlugin({
           cssProcessorOptions: {
             map: false
           }
         })
-
       ].filter(Boolean),
       splitChunks: {
         chunks: 'all',
         name: false
       },
       runtimeChunk: {
-        name: entrypoint => `runtime-${entrypoint.name}`
+        name: (entrypoint) => `runtime-${entrypoint.name}`
       }
     },
 
@@ -93,12 +91,7 @@ module.exports = function (webpackEnv) {
           loader: require.resolve('babel-loader'),
           options: {
             customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-            presets: [
-              [
-                require.resolve('babel-preset-react-app/dependencies'),
-                { helpers: true }
-              ]
-            ],
+            presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
             cacheDirectory: true,
             cacheCompression: false,
             compact: true
@@ -140,8 +133,6 @@ module.exports = function (webpackEnv) {
         chunkFilename: 'static/css/[name].[contenthash:8].chunk.css'
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-
     ].filter(Boolean)
-
   }
 }

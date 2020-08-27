@@ -1,4 +1,3 @@
-
 import niv from 'node-input-validator'
 import mongoose from 'mongoose'
 
@@ -9,10 +8,17 @@ niv.extend('unique', ({ value, args }) => {
   if (args[2]) {
     condition._id = { $ne: mongoose.Types.ObjectId(args[2]) }
   }
-  return mongoose.model(args[0]).findOne(condition).select(field)
+  return mongoose
+    .model(args[0])
+    .findOne(condition)
+    .select(field)
     .exec()
-    .then((doc) => { return !doc })
-    .catch(() => { return true })
+    .then((doc) => {
+      return !doc
+    })
+    .catch(() => {
+      return true
+    })
 })
 
 niv.extend('exists', ({ value, args }) => {
@@ -22,10 +28,17 @@ niv.extend('exists', ({ value, args }) => {
   if (args[2]) {
     condition._id = { $ne: mongoose.Types.ObjectId(args[2]) }
   }
-  return mongoose.model(args[0]).findOne(condition).select(field)
+  return mongoose
+    .model(args[0])
+    .findOne(condition)
+    .select(field)
     .exec()
-    .then((doc) => { return !!doc })
-    .catch(() => { return false })
+    .then((doc) => {
+      return !!doc
+    })
+    .catch(() => {
+      return false
+    })
 })
 
 niv.extend('different', ({ value, args }, v) => {
@@ -52,5 +65,11 @@ niv.extend('different', ({ value, args }, v) => {
 
   return false
 })
+
+niv.extendMessages({ exists: ":attribute :value doesn't exist!" })
+
+niv.extendMessages({ unique: ':attribute :value already exist!' })
+
+niv.extendMessages({ different: ':attribute must be different!' })
 
 export default niv.Validator

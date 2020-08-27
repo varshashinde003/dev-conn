@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { adminPrefix } from '../../../constants/route-prefix'
 import Breadcrumb from '../../components/admin/breadcrumb'
 
 class Candidates extends Component {
@@ -7,7 +8,7 @@ class Candidates extends Component {
     return (
       <div className="main-panel">
         <div className="content-wrapper">
-          <Breadcrumb />
+          <Breadcrumb title='Candidates' />
           <div className="row">
             <div className="col-12">
               <span className="d-flex align-items-center purchase-popup">
@@ -15,8 +16,8 @@ class Candidates extends Component {
                 <a href="https://github.com/BootstrapDash/PurpleAdmin-Free-Admin-Template" className="btn ml-auto download-button">
                   Download Free Version
                 </a>
-                <Link to="/" className="btn purchase-button">
-                  Add Employer
+                <Link to={`/${adminPrefix}/add-candidate`} className="btn purchase-button">
+                  Add Candidate
                 </Link>
               </span>
             </div>

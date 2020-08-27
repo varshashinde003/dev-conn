@@ -1,7 +1,49 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+import { adminPrefix } from '../../constants/route-prefix'
+import { login } from '../actions/admin/login-actions'
+import Textbox from '../components/textbox'
+import Button from '../components/admin/button'
 
 class Login extends Component {
-  render () {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      password: ''
+    }
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.loginCallback = this.loginCallback.bind(this)
+  }
+
+  handleInputChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+    const { onLogin, history } = this.props
+    const data = {
+      email: this.state.email,
+      password: this.state.password
+    }
+    onLogin(data, this.loginCallback, history)
+  }
+
+  loginCallback() {
+    const redirectTo = _URLSearchParams('redirectTo') || `/${adminPrefix}/`
+    this.props.history.replace(redirectTo)
+  }
+
+  render() {
+    const { email, password } = this.state
     return (
       <div className="container-scroller">
         <div className="container-fluid page-body-wrapper full-page-wrapper">
@@ -14,32 +56,15 @@ class Login extends Component {
                   </div>
                   <h4>Hello! lets get started</h4>
                   <h6 className="font-weight-light">Sign in to continue.</h6>
-                  <form className="pt-3">
+                  <form className="pt-3" onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                      <input type="email" className="form-control form-control-lg" id="exampleInputEmail1" placeholder="Username" />
+                      <Textbox type="email" name="email" value={email} placeholder="email" onChange={this.handleInputChange} />
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password" />
+                      <Textbox type="password" name="password" value={password} placeholder="Password" onChange={this.handleInputChange} />
                     </div>
                     <div className="mt-3">
-                      <a className="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" href="/index.html">SIGN IN</a>
-                    </div>
-                    <div className="my-2 d-flex justify-content-between align-items-center">
-                      <div className="form-check">
-                        <label className="form-check-label text-muted">
-                          <input type="checkbox" className="form-check-input" />
-                                Keep me signed in
-                        </label>
-                      </div>
-                      <a href="#" className="auth-link text-black">Forgot password?</a>
-                    </div>
-                    <div className="mb-2">
-                      <button type="button" className="btn btn-block btn-facebook auth-form-btn">
-                        <i className="mdi mdi-facebook mr-2"></i>Connect using facebook
-                      </button>
-                    </div>
-                    <div className="text-center mt-4 font-weight-light">
-                    Dont have an account? <a href="register.html" className="text-primary">Create</a>
+                      <Button type="submit" label="SIGN IN" />
                     </div>
                   </form>
                 </div>
@@ -51,4 +76,31 @@ class Login extends Component {
     )
   }
 }
-export default Login
+
+const _URLSearchParams = (name) => {
+  var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.href)
+  if (results == null) {
+    return null
+  } else {
+    return decodeURI(results[1]) || 0
+  }
+}
+
+const mapStateToProps = (state) => ({
+  Common: state.CommonReducer
+})
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      onLogin: login
+    },
+    dispatch
+  )
+
+Login.propTypes = {
+  history: PropTypes.object.isRequired,
+  onLogin: PropTypes.func.isRequired
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

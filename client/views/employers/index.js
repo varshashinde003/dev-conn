@@ -1,26 +1,22 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumb from '../../components/admin/breadcrumb'
+import { adminPrefix } from '../../../constants/route-prefix'
 
 class Employers extends Component {
   render () {
     return (
       <div className="main-panel">
         <div className="content-wrapper">
-          <Breadcrumb />
+          <Breadcrumb title='Employers' />
           <div className="row">
             <div className="col-12">
               <span className="d-flex align-items-center purchase-popup">
-                <p>
-                  Like what you see? Check out our premium version for more.
-                </p>
-                <a
-                  href="https://github.com/BootstrapDash/PurpleAdmin-Free-Admin-Template"
-                  className="btn ml-auto download-button"
-                >
+                <p>Like what you see? Check out our premium version for more.</p>
+                <a href="https://github.com/BootstrapDash/PurpleAdmin-Free-Admin-Template" className="btn ml-auto download-button">
                   Download Free Version
                 </a>
-                <Link to="/" className="btn purchase-button">
+                <Link to={`/${adminPrefix}/add-employer`} className="btn purchase-button">
                   Add Employer
                 </Link>
               </span>
@@ -45,11 +41,9 @@ class Employers extends Component {
                       <tbody>
                         <tr>
                           <td>
-                            <img
-                              src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png"
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png"
                               className="mr-2"
-                              alt="image"
-                            />
+                              alt="image" />
                             <strong>Google Inc.</strong>
                           </td>
                           <td>support@google.com</td>

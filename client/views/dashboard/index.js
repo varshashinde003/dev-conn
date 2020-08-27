@@ -1,42 +1,19 @@
 import React, { Component } from 'react'
+import Breadcrumb from '../../components/admin/breadcrumb'
 
 class Dashboard extends Component {
-  render () {
+  render() {
     return (
       <div className="main-panel">
         <div className="content-wrapper">
-          <div className="row">
-            {/* <div className="col-12">
-              <span className="d-flex align-items-center purchase-popup">
-                <p>Like what you see? Check out our premium version for more.</p>
-                <a href="https://github.com/BootstrapDash/PurpleAdmin-Free-Admin-Template" className="btn ml-auto download-button">Download Free Version</a>
-                <a href="https://www.bootstrapdash.com/product/purple-bootstrap-4-admin-template/" className="btn purchase-button">Upgrade To Pro</a>
-                <i className="mdi mdi-close popup-dismiss"></i>
-              </span>
-            </div> */}
-          </div>
-          <div className="page-header">
-            <h3 className="page-title">
-              <span className="page-title-icon bg-gradient-primary text-white mr-2">
-                <i className="mdi mdi-home"></i>
-              </span>
-              Dashboard
-            </h3>
-            <nav aria-label="breadcrumb">
-              <ul className="breadcrumb">
-                <li className="breadcrumb-item active" aria-current="page">
-                  <span></span>Overview
-                  <i className="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          <Breadcrumb title="Dashboard" showBreadrumbs={false} />
           <div className="row">
             <div className="col-md-4 stretch-card grid-margin">
               <div className="card bg-gradient-danger card-img-holder text-white">
                 <div className="card-body">
-                  <img src="/images/dashboard/circle.svg" className="card-img-absolute" alt="circle-image"/>
-                  <h4 className="font-weight-normal mb-3">Weekly Sales
+                  <img src="/images/dashboard/circle.svg" className="card-img-absolute" alt="circle-image" />
+                  <h4 className="font-weight-normal mb-3">
+                    Weekly Sales
                     <i className="mdi mdi-chart-line mdi-24px float-right"></i>
                   </h4>
                   <h2 className="mb-5">$ 15,0000</h2>
@@ -47,8 +24,9 @@ class Dashboard extends Component {
             <div className="col-md-4 stretch-card grid-margin">
               <div className="card bg-gradient-info card-img-holder text-white">
                 <div className="card-body">
-                  <img src="/images/dashboard/circle.svg" className="card-img-absolute" alt="circle-image"/>
-                  <h4 className="font-weight-normal mb-3">Weekly Orders
+                  <img src="/images/dashboard/circle.svg" className="card-img-absolute" alt="circle-image" />
+                  <h4 className="font-weight-normal mb-3">
+                    Weekly Orders
                     <i className="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                   </h4>
                   <h2 className="mb-5">45,6334</h2>
@@ -59,8 +37,9 @@ class Dashboard extends Component {
             <div className="col-md-4 stretch-card grid-margin">
               <div className="card bg-gradient-success card-img-holder text-white">
                 <div className="card-body">
-                  <img src="/images/dashboard/circle.svg" className="card-img-absolute" alt="circle-image"/>
-                  <h4 className="font-weight-normal mb-3">Visitors Online
+                  <img src="/images/dashboard/circle.svg" className="card-img-absolute" alt="circle-image" />
+                  <h4 className="font-weight-normal mb-3">
+                    Visitors Online
                     <i className="mdi mdi-diamond mdi-24px float-right"></i>
                   </h4>
                   <h2 className="mb-5">95,5741</h2>
@@ -95,143 +74,103 @@ class Dashboard extends Component {
             <div className="col-12 grid-margin">
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title">Recent Tickets</h4>
+                  <h4 className="card-title">Recent Job Posting</h4>
                   <div className="table-responsive">
                     <table className="table">
                       <thead>
                         <tr>
-                          <th>
-                            Assignee
-                          </th>
-                          <th>
-                            Subject
-                          </th>
-                          <th>
-                            Status
-                          </th>
-                          <th>
-                            Last Update
-                          </th>
-                          <th>
-                            Tracking ID
-                          </th>
+                          <th>Job ID</th>
+                          <th>Title</th>
+                          <th>Experience</th>
+                          <th>Key Skills</th>
+                          <th>Job Type</th>
+                          <th>Applicants</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            <img src="/images/faces/face1.jpg" className="mr-2" alt="image" />
-                            Varsha
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Full-stack Developer</span>
+                            </div>
                           </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
                           <td>
-                            Fund is not recieved
+                            <span className="tag tag-success">FULL TIME</span>
                           </td>
+                          <td>30</td>
                           <td>
-                            <label className="badge badge-gradient-success">DONE</label>
-                          </td>
-                          <td>
-                            Dec 5, 2017
-                          </td>
-                          <td>
-                            WD-12345
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <img src="/images/faces/face2.jpg" className="mr-2" alt="image" />
-                            Stella Johnson
-                          </td>
-                          <td>
-                            High loading time
-                          </td>
-                          <td>
-                            <label className="badge badge-gradient-warning">PROGRESS</label>
-                          </td>
-                          <td>
-                            Dec 12, 2017
-                          </td>
-                          <td>
-                            WD-12346
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            <img src="/images/faces/face3.jpg" className="mr-2" alt="image" />
-                            Marina Michel
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Marketing</span>
+                            </div>
                           </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
                           <td>
-                            Website down for one week
+                            <span className="tag tag-success">FULL TIME</span>
                           </td>
+                          <td>30</td>
                           <td>
-                            <label className="badge badge-gradient-info">ON HOLD</label>
-                          </td>
-                          <td>
-                            Dec 16, 2017
-                          </td>
-                          <td>
-                            WD-12347
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            <img src="/images/faces/face4.jpg" className="mr-2" alt="image" />
-                            John Doe
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Web Application Developer</span>
+                            </div>
                           </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
                           <td>
-                            Loosing control on server
+                            <span className="tag tag-success">FULL TIME</span>
                           </td>
+                          <td>30</td>
                           <td>
-                            <label className="badge badge-gradient-danger">REJECTED</label>
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
+                        </tr>
+                        <tr>
+                          <td>JD-2546</td>
                           <td>
-                            Dec 3, 2017
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Designer</span>
+                            </div>
                           </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
                           <td>
-                            WD-12348
+                            <span className="tag tag-success">FULL TIME</span>
+                          </td>
+                          <td>30</td>
+                          <td>
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-12 grid-margin stretch-card">
-              <div className="card">
-                <div className="card-body">
-                  <h4 className="card-title">Recent Updates</h4>
-                  <div className="d-flex">
-                    <div className="d-flex align-items-center mr-4 text-muted font-weight-light">
-                      <i className="mdi mdi-account-outline icon-sm mr-2"></i>
-                      <span>jack Menqu</span>
-                    </div>
-                    <div className="d-flex align-items-center text-muted font-weight-light">
-                      <i className="mdi mdi-clock icon-sm mr-2"></i>
-                      <span>October 3rd, 2018</span>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-6 pr-1">
-                      <img src="/images/dashboard/img_1.jpg" className="mb-2 mw-100 w-100 rounded" alt="image" />
-                      <img src="/images/dashboard/img_4.jpg" className="mw-100 w-100 rounded" alt="image" />
-                    </div>
-                    <div className="col-6 pl-1">
-                      <img src="/images/dashboard/img_2.jpg" className="mb-2 mw-100 w-100 rounded" alt="image" />
-                      <img src="/images/dashboard/img_3.jpg" className="mw-100 w-100 rounded" alt="image" />
-                    </div>
-                  </div>
-                  <div className="d-flex mt-5 align-items-top">
-                    <img src="/images/faces/face3.jpg" className="img-sm rounded-circle mr-3" alt="image" />
-                    <div className="mb-0 flex-grow">
-                      <h5 className="mr-2 mb-2">School Website - Authentication Module.</h5>
-                      <p className="mb-0 font-weight-light">It is a long established fact that a reader will be distracted by the readable
-                        content of a page.</p>
-                    </div>
-                    <div className="ml-auto">
-                      <i className="mdi mdi-heart-outline text-muted"></i>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -246,115 +185,94 @@ class Dashboard extends Component {
                     <table className="table">
                       <thead>
                         <tr>
-                          <th>
-                            #
-                          </th>
-                          <th>
-                            Name
-                          </th>
-                          <th>
-                            Due Date
-                          </th>
-                          <th>
-                            Progress
-                          </th>
+                          <th>Job ID</th>
+                          <th>Title</th>
+                          <th>Experience</th>
+                          <th>Key Skills</th>
+                          <th>Job Type</th>
+                          <th>Applicants</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            1
-                          </td>
-                          <td>
-                            Herman Beck
-                          </td>
-                          <td>
-                            May 15, 2015
-                          </td>
-                          <td>
-                            <div className="progress">
-                              <div className="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Full-stack Developer</span>
                             </div>
+                          </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
+                          <td>
+                            <span className="tag tag-success">FULL TIME</span>
+                          </td>
+                          <td>30</td>
+                          <td>
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            2
-                          </td>
-                          <td>
-                            Messsy Adam
-                          </td>
-                          <td>
-                            Jul 01, 2015
-                          </td>
-                          <td>
-                            <div className="progress">
-                              <div className="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Marketing</span>
                             </div>
+                          </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
+                          <td>
+                            <span className="tag tag-success">FULL TIME</span>
+                          </td>
+                          <td>30</td>
+                          <td>
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            3
-                          </td>
-                          <td>
-                            John Richards
-                          </td>
-                          <td>
-                            Apr 12, 2015
-                          </td>
-                          <td>
-                            <div className="progress">
-                              <div className="progress-bar bg-gradient-warning" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Web Application Developer</span>
                             </div>
+                          </td>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
+                          <td>
+                            <span className="tag tag-success">FULL TIME</span>
+                          </td>
+                          <td>30</td>
+                          <td>
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                         <tr>
+                          <td>JD-2546</td>
                           <td>
-                            4
-                          </td>
-                          <td>
-                            Peter Meggik
-                          </td>
-                          <td>
-                            May 15, 2015
-                          </td>
-                          <td>
-                            <div className="progress">
-                              <div className="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            <img src="https://diylogodesigns.com/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background-768x768.png" className="mr-2" alt="image" />
+                            <div className="job-listing-title">
+                              <strong>Google Inc.</strong>
+                              <br />
+                              <span>Designer</span>
                             </div>
                           </td>
-                        </tr>
-                        <tr>
+                          <td>3 Years</td>
+                          <td>Full Stack, React, Javascript</td>
                           <td>
-                            5
+                            <span className="tag tag-success">FULL TIME</span>
                           </td>
+                          <td>30</td>
                           <td>
-                            Edward
-                          </td>
-                          <td>
-                            May 03, 2015
-                          </td>
-                          <td>
-                            <div className="progress">
-                              <div className="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            5
-                          </td>
-                          <td>
-                            Ronald
-                          </td>
-                          <td>
-                            Jun 05, 2015
-                          </td>
-                          <td>
-                            <div className="progress">
-                              <div className="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
+                            <label className="badge badge-gradient-success">APPROVED</label>
                           </td>
                         </tr>
                       </tbody>
@@ -367,12 +285,15 @@ class Dashboard extends Component {
         </div>
         <footer className="footer">
           <div className="d-sm-flex justify-content-center justify-content-sm-between">
-            <span className="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2017 <a href="https://www.bootstrapdash.com/" >Bootstrap Dash</a>. All rights reserved.</span>
-            <span className="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted and made with <i className="mdi mdi-heart text-danger"></i></span>
+            <span className="text-muted text-center text-sm-left d-block d-sm-inline-block">
+              Copyright © 2017 <a href="https://www.bootstrapdash.com/">Bootstrap Dash</a>. All rights reserved.
+            </span>
+            <span className="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+              Hand-crafted and made with <i className="mdi mdi-heart text-danger"></i>
+            </span>
           </div>
         </footer>
       </div>
-
     )
   }
 }

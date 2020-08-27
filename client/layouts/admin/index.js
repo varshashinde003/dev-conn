@@ -3,8 +3,13 @@ import PropTypes from 'prop-types'
 import Header from '../../components/admin/header'
 import Sidebar from '../../components/admin/sidebar'
 
-class Dashboard extends Component {
-  constructor (props) {
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+import { getProfile } from '../../actions/admin/profile-actions'
+
+class AdminLayout extends Component {
+  constructor(props) {
     super(props)
     this.state = {
       currentMenuItemIndex: null,
@@ -16,36 +21,60 @@ class Dashboard extends Component {
     this.toggleDropdownMenu = this.toggleDropdownMenu.bind(this)
   }
 
-  setCurrentMenu (event) {
+  componentDidMount() {
+    const { history, onGetProfile } = this.props
+    onGetProfile(history, true)
+    console.log(this.props)
+  }
+
+  setCurrentMenu(event) {
     this.setState({
       currentMenuItemIndex: parseInt(event.target.dataset.menuindex)
     })
   }
 
-  toggleDropdownMenu (event) {
-    this.setState(
-      {
-        [`is${event.target.dataset.name}MenuVisible`]: !this.state[`is${event.target.dataset.name}MenuVisible`]
-      })
+  toggleDropdownMenu(event) {
+    this.setState({
+      [`is${event.target.dataset.name}MenuVisible`]: !this.state[`is${event.target.dataset.name}MenuVisible`]
+    })
   }
 
-  render () {
+  render() {
     const { isMessagesMenuVisible, isProfileMenuVisible, isNotificationsMenuVisible, currentMenuItemIndex } = this.state
-    const { children } = this.props
-    return (
-      <div className="container-scroller">
-        <Header toggleDropdownMenu={this.toggleDropdownMenu} isMessagesMenuVisible={isMessagesMenuVisible} isProfileMenuVisible={isProfileMenuVisible}isNotificationsMenuVisible={isNotificationsMenuVisible} />
-        <div className="container-fluid page-body-wrapper">
-          <Sidebar setCurrentMenu={this.setCurrentMenu} currentMenuItemIndex={currentMenuItemIndex} />
-          {children}
+    const { children, history, Common } = this.props
+    if (Common.loading) {
+      return <div className="mt-16"><div className="loader mx-auto"></div></div>
+    } else {
+      return (
+        <div className="container-scroller">
+          <Header toggleDropdownMenu={this.toggleDropdownMenu} isMessagesMenuVisible={isMessagesMenuVisible} isProfileMenuVisible={isProfileMenuVisible} isNotificationsMenuVisible={isNotificationsMenuVisible} history={history} />
+          <div className="container-fluid page-body-wrapper">
+            <Sidebar setCurrentMenu={this.setCurrentMenu} currentMenuItemIndex={currentMenuItemIndex} />
+            {children}
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }
 
-Dashboard.propTypes = {
-  children: PropTypes.object.isRequired
+const mapStateToProps = (state) => ({
+  Common: state.CommonReducer
+})
+
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      onGetProfile: getProfile
+    },
+    dispatch
+  )
+
+AdminLayout.propTypes = {
+  children: PropTypes.object.isRequired,
+  history: PropTypes.object,
+  onGetProfile: PropTypes.func,
+  Common: PropTypes.object.isRequired
 }
 
-export default Dashboard
+export default connect(mapStateToProps, mapDispatchToProps)(AdminLayout)
